@@ -35,6 +35,12 @@ class Table extends React.Component {
           isLoaded: true,
           userDataArray: result,
         });
+      },
+      (error) => {
+        this.setState({
+          isLoaded: true,
+          error,
+        });
       }
     )
   }
@@ -45,28 +51,44 @@ class Table extends React.Component {
 
   render() {
 
-    const { userDataArray } = this.state;
+    const { error, isLoaded, userDataArray } = this.state;
 
-    return (
-      <table className="data-table" id = "react-id">
-        <tbody>
-          <tr>
-            <th>id</th>
-            <th>firstName</th>
-            <th>lastName</th>
-            <th>email</th>
-            <th>phone</th>
-          </tr>
-
-          {userDataArray.map((userData, idx) => this.renderRow(userData, idx))}
-
-        </tbody>
-      </table>
-    );
+    if (error) {
+      return <div>Ошибка: {error.message}</div>
+    } else if (!isLoaded) {
+      return <div>Загрузка...</div>
+    } else {
+      return (
+        <table className="data-table">
+          <tbody>
+            <tr>
+              <th>id</th>
+              <th>firstName</th>
+              <th>lastName</th>
+              <th>email</th>
+              <th>phone</th>
+            </tr>
+  
+            {userDataArray.map((userData, idx) => this.renderRow(userData, idx))}
+  
+          </tbody>
+        </table>
+      );
+    }
+    
   }
 }
 
+class App extends React.Component {
+  
+  render() {
+    return (
+      <Table />
+    )
+  } 
+}
+
 ReactDom.render(
-  <Table />,
+  <App />,
   document.getElementById('root'),
 )
