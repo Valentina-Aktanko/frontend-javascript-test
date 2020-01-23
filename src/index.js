@@ -15,8 +15,71 @@ class TableRow extends React.Component {
   }
 }
 
+class TableHead extends React.Component {
+  render() {
+    return (
+      <tr>
+        <th>id</th>
+        <th>firstName</th>
+        <th>lastName</th>
+        <th>email</th>
+        <th>phone</th>
+      </tr>
+    );
+  }
+}
+
 class Table extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      error: null,
+      isLoaded: false,
+      userDataArray1: [],
+    };
+  }
+
+  componentDidMount() {
+    fetch("http://www.filltext.com/?rows=32&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}")
+    .then(res => res.json())
+    .then(
+      (result) => {
+        this.setState({
+          isLoaded: true,
+          userDataArray1: result,
+        });
+      },
+      (error) => {
+        this.setState({
+          isLoaded: true,
+          error,
+        });
+      }
+    )
+  }
+
+  renderRow(userData, idx) {
+    return <TableRow key={idx} userData={userData} />
+  }
+
+  render() {
+
+    const { userDataArray } = this.props;
+
+    return (
+        <table className="data-table">
+          <tbody>
+            {<TableHead />}
+            {userDataArray.map((userData, idx) => this.renderRow(userData, idx))}
+          </tbody>
+        </table>
+      );
+  }
+}
+
+class App extends React.Component {
+  
   constructor(props) {
     super(props);
     this.state = {
@@ -45,10 +108,6 @@ class Table extends React.Component {
     )
   }
 
-  renderRow(userData, idx) {
-    return <TableRow key={idx} userData={userData} />
-  }
-
   render() {
 
     const { error, isLoaded, userDataArray } = this.state;
@@ -59,32 +118,9 @@ class Table extends React.Component {
       return <div>Загрузка...</div>
     } else {
       return (
-        <table className="data-table">
-          <tbody>
-            <tr>
-              <th>id</th>
-              <th>firstName</th>
-              <th>lastName</th>
-              <th>email</th>
-              <th>phone</th>
-            </tr>
-  
-            {userDataArray.map((userData, idx) => this.renderRow(userData, idx))}
-  
-          </tbody>
-        </table>
+        <Table userDataArray={userDataArray}/>
       );
     }
-    
-  }
-}
-
-class App extends React.Component {
-  
-  render() {
-    return (
-      <Table />
-    )
   } 
 }
 
