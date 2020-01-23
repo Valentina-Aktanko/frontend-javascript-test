@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import { AddForm } from 'components/AddForm';
 import { Table } from 'components/Table';
 
 export class App extends Component {
@@ -39,7 +40,8 @@ export class App extends Component {
       return <div>Загрузка...</div>
     } else {
       return (
-        <Table userDataArray={userDataArray}/>
+        <AddForm />
+        // <Table userDataArray = { userDataArray } />
       );
     }
   }
