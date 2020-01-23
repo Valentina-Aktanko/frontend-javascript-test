@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class TableHead extends React.Component {
+class TableHead extends Component {
   render() {
     return (
       <tr>
@@ -14,7 +14,7 @@ class TableHead extends React.Component {
   }
 }
 
-class TableRow extends React.Component {
+class TableRow extends Component {
   render() {
     return (
       <tr>

@@ -4,13 +4,10 @@ import { Table } from 'components/Table';
 
 export class App extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      error: null,
-      isLoaded: false,
-      userDataArray: [],
-    };
+  state = {
+    error: null,
+    isLoaded: false,
+    userDataArray: [],
   }
 
   componentDidMount() {
