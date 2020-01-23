@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Table } from './components/Table.jsx';
+import { Table } from 'components/Table';
 
 export class App extends Component {
 
