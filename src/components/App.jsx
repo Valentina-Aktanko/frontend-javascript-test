@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment  } from 'react';
 
 import { AddForm } from 'components/AddForm';
 import { Table } from 'components/Table';
@@ -40,8 +40,10 @@ export class App extends Component {
       return <div>Загрузка...</div>
     } else {
       return (
-        <AddForm />
-        // <Table userDataArray = { userDataArray } />
+        <Fragment>
+          <AddForm />
+          <Table userDataArray = { userDataArray } />
+        </Fragment>
       );
     }
   }
