@@ -2,6 +2,7 @@ import React, { Component, Fragment  } from 'react';
 
 import { FormContainer } from 'components/FormContainer';
 import { Table } from 'components/Table';
+import { Button } from 'components/Button';
 
 export class App extends Component {
 
@@ -66,7 +67,11 @@ export class App extends Component {
       return (
         <Fragment>
           <div className="container">
-            <button onClick={this.handleToggleShowForm}>Добавить</button>
+            <Button 
+              type={'button'}
+              title={'Добавить'}
+              onClick={this.handleToggleShowForm}
+            />
             {showForm && <FormContainer onSend={() => this.handleSendForm()}/>}
             <Table userDataArray = { userDataArray } />
           </div>

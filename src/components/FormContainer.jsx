@@ -17,7 +17,6 @@ export class FormContainer extends Component {
     lastNameValid: false,
     emailValid: false,
     phoneValid: false,
-
     formValid: false,
   }
 

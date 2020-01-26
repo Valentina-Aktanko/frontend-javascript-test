@@ -1,45 +1,21 @@
 import React, { Component } from 'react';
-
-class TableHead extends Component {
-
-  handleSortBy = (event) => {
-
-    const sortingDirection = event.target.dataset.direction;
-    sortingDirection = "asc";
-    console.log(sortingDirection);
-  }
-
-  render() {
-    return (
-      <tr>
-        <th onClick={this.handleSortBy}>id</th>
-        <th>firstName</th>
-        <th>lastName</th>
-        <th>email</th>
-        <th>phone</th>
-      </tr>
-    );
-  }
-}
-
-class TableRow extends Component {
-  render() {
-    return (
-      <tr>
-        <td>{this.props.userData.id}</td>
-        <td>{this.props.userData.firstName}</td>
-        <td>{this.props.userData.lastName}</td>
-        <td>{this.props.userData.email}</td>
-        <td>{this.props.userData.phone}</td>
-      </tr>
-    );
-  }
-}
+import PropTypes from 'prop-types';
 
 export class Table extends Component {
+  static propTypes =  {
+    userDataArray: PropTypes.array.isRequired,
+  }
 
   renderRow(userData, idx) {
-    return <TableRow key={idx} userData={userData} />
+    return (
+      <tr key={idx}>
+        <td>{userData.id}</td>
+        <td>{userData.firstName}</td>
+        <td>{userData.lastName}</td>
+        <td>{userData.email}</td>
+        <td>{userData.phone}</td>
+      </tr>
+    )
   }
 
   render() {
@@ -48,8 +24,16 @@ export class Table extends Component {
 
     return (
         <table className="data-table">
+          <thead>
+            <tr>
+              <th>id</th>
+              <th>firstName</th>
+              <th>lastName</th>
+              <th>email</th>
+              <th>phone</th>
+            </tr>
+          </thead>
           <tbody>
-            {<TableHead />}
             {userDataArray.map((userData, idx) => this.renderRow(userData, idx))}
           </tbody>
         </table>
