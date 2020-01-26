@@ -84,7 +84,7 @@ export class FormContainer extends Component {
             title={'id:'}
             id={'input-id'}
             name={'id'}
-            value={id}
+            value={this.state.id}
             placeholder={'101'}
             handleChange = {this.handleUserInput}
           />
@@ -125,19 +125,6 @@ export class FormContainer extends Component {
              handleChange = {this.handleUserInput}
           />
 
-          {/* <label htmlFor="input-id">id:</label>
-          <input className="add-form__input" onChange={this.handleUserInput} id="input-id" name="input-id" type="text" placeholder="101" value={this.state.id} />
-          <label htmlFor="add-form-firstName">first name:</label>
-          <input className="add-form__input" onChange={this.handleUserInput} id="add-form-firstName" name="firstName" type="text" placeholder="Ivan" value={this.state.firstName} />
-          <label htmlFor="add-form-lastName">last name:</label>
-          <input className="add-form__input" onChange={this.handleUserInput} id="add-form-lastName" name="lastName" type="text" placeholder="Ivanov" value={this.state.lastName} />
-          <label htmlFor="add-form-email">email:</label>
-          <input className="add-form__input" onChange={this.handleUserInput} id="add-form-email" name="email" type="text" placeholder="mail@mail.ru" value={this.state.email} />
-          <label htmlFor="add-form-phone">phone:</label>
-          <input className="add-form__input" onChange={this.handleUserInput} id="add-form-phone" name="phone" type="text" placeholder="(123)456-7890" value={this.state.phone} /> */}
-          
-          {/* <button className="button" action="#" type="submit" onClick={this.handleFormSubmit} disabled={!this.state.formValid}>Добавить в таблицу</button> */}
-          
           <Button 
             action={'#'}
             type={'submit'}
