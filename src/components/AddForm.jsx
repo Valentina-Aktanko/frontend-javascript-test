@@ -28,7 +28,8 @@ export class AddForm extends Component {
       () => { this.validateField(name, value) });
   }
 
-  validateField(fieldName, value) {
+  validateField = (fieldName, value) => {
+
     let { idValid, firstNameValid, lastNameValid, emailValid, phoneValid } = this.state;
 
     // Валидация просто на заполненность
@@ -37,16 +38,16 @@ export class AddForm extends Component {
         idValid = Boolean(value);
         break;
       case 'firstName':
-        firstNameValid = value !== '';
+        firstNameValid = Boolean(value);
         break;
       case 'lastName':
-        lastNameValid = value !== '';
+        lastNameValid = Boolean(value);
         break;
       case 'email':
-        emailValid = value !== '';
+        emailValid = Boolean(value);
         break;
       case 'phone':
-        phoneValid = value !== '';
+        phoneValid = Boolean(value);
         break;
     }
         
@@ -61,19 +62,14 @@ export class AddForm extends Component {
     console.log(this.state);
   }
 
-  validateForm() {
+  validateForm = () => {
     this.setState({ formValid: this.state.idValid && this.state.firstNameValid && this.state.lastNameValid && this.state.emailValid && this.state.phoneValid });
-  }
-
-  handleShowForm(event) {
-    event.preventDefault();
   }
 
   render() {
 
     return (
       <Fragment>
-        <button onClick={this.handleShowForm}>Добавить</button>
         <form className="add-form" id="add-data-form" method="post">
           <label htmlFor="add-form-id">id:</label>
           <input className="add-form__input" onChange={this.handleUserInput} id="add-form-id" name="id" type="text" placeholder="101" value={this.state.id} />

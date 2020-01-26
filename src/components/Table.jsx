@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
 
 class TableHead extends Component {
+
+  handleSortBy = (event) => {
+
+    const sortingDirection = event.target.dataset.direction;
+    sortingDirection = "asc";
+    console.log(sortingDirection);
+  }
+
   render() {
     return (
       <tr>
-        <th>id</th>
+        <th onClick={this.handleSortBy}>id</th>
         <th>firstName</th>
         <th>lastName</th>
         <th>email</th>
