@@ -1,6 +1,6 @@
 import React, { Component, Fragment  } from 'react';
 
-import { AddForm } from 'components/AddForm';
+import { FormContainer } from 'components/FormContainer';
 import { Table } from 'components/Table';
 
 export class App extends Component {
@@ -49,6 +49,10 @@ export class App extends Component {
     });
   }
 
+  handleSendForm = () => {
+    console.log("Form was send!");
+  }
+
   render() {
 
     const { error, isLoaded, userDataArray } = this.state;
@@ -61,9 +65,11 @@ export class App extends Component {
     } else {
       return (
         <Fragment>
-          <button onClick={this.handleToggleShowForm}>Добавить</button>
-          {showForm && <AddForm />}
-          <Table userDataArray = { userDataArray } />
+          <div className="container">
+            <button onClick={this.handleToggleShowForm}>Добавить</button>
+            {showForm && <FormContainer onSend={() => this.handleSendForm()}/>}
+            <Table userDataArray = { userDataArray } />
+          </div>
         </Fragment>
       );
     }
