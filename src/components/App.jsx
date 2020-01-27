@@ -5,16 +5,12 @@ import { Table } from 'components/Table';
 import { Button } from 'components/Button';
 
 export class App extends Component {
-
   state = {
     address: "http://www.filltext.com/?rows=32&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}",
-
     error: null,
     isLoaded: false,
-    userDataArray: [],
-
     showForm: false,
-
+    userDataArray: [],
     newUser: {
       id: '',
       firstName: '',
@@ -30,16 +26,9 @@ export class App extends Component {
       phone: false,
       form: false,
     },
-
-    sortBy: {
-      field: null,
-      direction: null
-    },
-
   }
 
   componentDidMount() {
-
     const { address } = this.state;
     
     fetch(address)
@@ -60,7 +49,7 @@ export class App extends Component {
     )
   }
 
-  handleToggleShowForm = () => {
+  handleClick = () => {
     this.setState({
       showForm : !this.state.showForm,
     });
@@ -74,24 +63,23 @@ export class App extends Component {
       userDataArray.unshift(newUser);
       return { userDataArray };
     });
-    console.log(this.state);
   }
 
   handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
 
-    this.setState(prevState => {
-      let newUser = Object.assign({}, prevState.newUser);
-      newUser[name] = value;
-      return { newUser };
-    },
-      () => { this.validateField(name, value) 
-    });
+    this.setState(prevState => 
+      {
+        let newUser = Object.assign({}, prevState.newUser);
+        newUser[name] = value;
+        return { newUser };
+      },
+      () => {this.validateField(name, value)}
+    );
   }
 
   validateField = (fieldName, value) => {
-    let { validation } = this.state;
     let isValid = false;
 
     // Валидация просто на заполненность
@@ -139,9 +127,10 @@ export class App extends Component {
   }
 
   render() {
-
-    const { error, isLoaded, userDataArray } = this.state;
-    const { newUser, showForm, validation } = this.state;
+    const { error, isLoaded, showForm, userDataArray, newUser, validation } = this.state;
+    const handleClick = this.handleClick;
+    const handleSubmit = this.handleSubmit;
+    const handleChange = this.handleChange;
 
     if (error) {
       return <div>Ошибка: {error.message}</div>
@@ -152,19 +141,19 @@ export class App extends Component {
         <Fragment>
           <div className="container">
             <Button 
-              type={'button'}
-              title={'Добавить'}
-              onClick={this.handleToggleShowForm}
+              type="button"
+              title="Добавить"
+              onClick={handleClick}
             />
             {showForm && (
               <Form 
-                newUser = { newUser } 
-                handleSubmit = { this.handleSubmit }
-                onChange = { this.handleChange }
-                formValid = { validation.form }
+                newUser={newUser} 
+                handleSubmit={handleSubmit}
+                onChange={handleChange}
+                formValid={validation.form}
               />
             )}
-            <Table userDataArray = { userDataArray } />
+            <Table userDataArray={userDataArray} />
           </div>
         </Fragment>
       );

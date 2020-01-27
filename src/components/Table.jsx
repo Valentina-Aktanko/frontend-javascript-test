@@ -19,7 +19,6 @@ export class Table extends Component {
   }
 
   render() {
-
     const { userDataArray } = this.props;
 
     return (
