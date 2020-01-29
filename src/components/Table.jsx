@@ -2,8 +2,35 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 export class Table extends Component {
+  state = {
+    id: "none",
+    firstName: "none",
+    lastName: "none",
+    email: "none",
+    phone: "none",
+  }
+
   static propTypes =  {
     userDataArray: PropTypes.array.isRequired,
+    onClick: PropTypes.func.isRequired,
+  }
+
+  handleClick = (event) => {
+    const { onClick } = this.props;
+    const fieldName = event.target.dataset.name;
+    let direction = this.state[fieldName];
+    
+    if (this.state[fieldName] === "none" || this.state[fieldName] === "asc") {
+      direction = "desc";
+    } else { 
+      direction = "asc";
+    };
+
+    this.setState({
+      [fieldName]: direction,
+    }, () => {
+      onClick(fieldName, direction);
+    });
   }
 
   renderRow(userData, idx) {
@@ -19,17 +46,46 @@ export class Table extends Component {
   }
 
   render() {
-    const { userDataArray } = this.props;
+    const { userDataArray, handleTableSorting } = this.props;
 
     return (
         <table className="data-table">
           <thead>
             <tr>
-              <th>id</th>
-              <th>firstName</th>
-              <th>lastName</th>
-              <th>email</th>
-              <th>phone</th>
+              <th 
+                data-name="id" 
+                data-sort={this.state.id}
+                onClick={this.handleClick}
+              >
+                id</th>
+              <th 
+                data-name="firstName" 
+                data-sort={this.state.firstName}
+                onClick={this.handleClick}
+              >
+                firstName
+              </th>
+              <th 
+                data-name="lastName" 
+                data-sort={this.state.lastName}
+                onClick={this.handleClick}
+              >
+                lastName
+              </th>
+              <th 
+                data-name="email" 
+                data-sort={this.state.email}
+                onClick={this.handleClick}
+              >
+                email
+              </th>
+              <th
+                data-name="phone" 
+                data-sort={this.state.phone}
+                onClick={this.handleClick}
+              >
+                phone
+              </th>
             </tr>
           </thead>
           <tbody>

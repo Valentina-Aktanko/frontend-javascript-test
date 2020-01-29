@@ -13,25 +13,7 @@ export class App extends Component {
     isLoaded: false,
     
     showForm: false,
-    
     userDataArray: [],
-    
-    // newUser: {
-    //   id: '',
-    //   firstName: '',
-    //   lastName: '',
-    //   email: '',
-    //   phone: '',
-    // },
-
-    // validation: {
-    //   id: false,
-    //   firstName: false,
-    //   lastName: false,
-    //   email: false,
-    //   phone: false,
-    //   form: false,
-    // },
   }
 
   componentDidMount() {
@@ -62,7 +44,6 @@ export class App extends Component {
   }
 
   handleSubmit = (newData) => {
-    // const { newData } = this.props;
 
     this.setState(prevState => {
       let userDataArray = prevState.userDataArray;
@@ -70,6 +51,10 @@ export class App extends Component {
       userDataArray.unshift(newData);
       return { userDataArray };
     });
+  }
+
+  handleSorting = (fieldName, direction) => {
+    console.log(fieldName, direction);
   }
 
   render() {
@@ -91,7 +76,7 @@ export class App extends Component {
             {showForm && (
               <Form onSubmit={this.handleSubmit}/>
             )}
-            <Table userDataArray={userDataArray} />
+            <Table userDataArray={userDataArray} onClick={this.handleSorting}/>
           </div>
         </Fragment>
       );
