@@ -54,7 +54,45 @@ export class App extends Component {
   }
 
   handleSorting = (fieldName, direction) => {
-    console.log(fieldName, direction);
+    let { userDataArray } = this.state;
+
+    if (fieldName === 'id' && direction === "desc") {
+      userDataArray.sort(function(a, b) {
+        return a[fieldName] - b[fieldName];
+      });
+    } else if (fieldName === 'id' && direction === "asc") {
+      userDataArray.sort(function(a, b) {
+        return b[fieldName] - a[fieldName];
+      });
+    } else if (fieldName !== 'id' && direction === "desc") {
+      userDataArray.sort(function(a, b) {
+        let nameA = a[fieldName].toLowerCase();
+        let nameB = b[fieldName].toLowerCase();
+        if (nameA < nameB) {
+          return -1;
+        } else if (nameA > nameB) {
+          return 1;
+        } else {
+          return 0 ;
+        }
+      });
+    } else if (fieldName !== 'id' && direction === "asc") {
+      userDataArray.sort(function(a, b) {
+        let nameA = a[fieldName].toLowerCase();
+        let nameB = b[fieldName].toLowerCase();
+        if (nameB < nameA) {
+          return -1;
+        } else if (nameB > nameA) {
+          return 1;
+        } else {
+          return 0 ;
+        }
+      });
+    } else console.log("Ошибка сортировки");
+
+    this.setState({
+      userDataArray: userDataArray,
+    });
   }
 
   render() {

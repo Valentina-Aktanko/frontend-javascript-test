@@ -27,6 +27,11 @@ export class Table extends Component {
     };
 
     this.setState({
+      id: "none",
+      firstName: "none",
+      lastName: "none",
+      email: "none",
+      phone: "none",
       [fieldName]: direction,
     }, () => {
       onClick(fieldName, direction);
