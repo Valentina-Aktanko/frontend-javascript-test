@@ -8,7 +8,7 @@ export class Form extends Component {
 
   state = {
     newData: {
-      id: '',
+      id: null,
       firstName: '',
       lastName: '',
       email: '',
@@ -44,7 +44,7 @@ export class Form extends Component {
 
   validateField = (fieldName, value) => {
 
-    // Валидация только на заполненность
+    // Валидациz не реализована, выполняется проверка на заполненность
     switch(fieldName) {
       case 'id':
         this.setState({
@@ -118,7 +118,7 @@ export class Form extends Component {
       
       this.setState({
 
-        id: '',
+        id: null,
         firstName: '',
         lastName: '',
         email: '',
