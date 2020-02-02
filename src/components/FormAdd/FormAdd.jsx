@@ -1,10 +1,14 @@
+import './FormAdd.scss';
+
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
+import { Label } from 'components/Label';
 import { Input } from 'components/Input';
 import { Button } from 'components/Button';
 
-export class Form extends Component {
+export class FormAdd extends Component {
 
   state = {
     newData: {
@@ -23,10 +27,10 @@ export class Form extends Component {
       phoneValid: false,
       formValid: false,
     }
-    
   }
 
   static propTypes =  {
+    className: PropTypes.string,
     onSubmit: PropTypes.func,
   }
 
@@ -44,7 +48,7 @@ export class Form extends Component {
 
   validateField = (fieldName, value) => {
 
-    // Валидациz не реализована, выполняется проверка на заполненность
+    // Валидация не реализована, выполняется проверка на заполненность
     switch(fieldName) {
       case 'id':
         this.setState({
@@ -138,63 +142,71 @@ export class Form extends Component {
 
   render() {
     const { formValid } = this.state.validation;
-    const { newData } = this.state;
+    const { className } = this.props;
+    const classes = classNames('form', [className]);
     
     return (
       <Fragment>
-        <form className="form" method="post">
-          <Input 
-            type="text"
-            title="id:"
-            id="input-id"
-            name="id"
-            value={this.state.id}
-            placeholder="101"
-            onChange={this.handleChange}
-          />
-          <Input 
-            type="text"
-            title="first name:"
-            id="input-firstName"
-            name="firstName"
-            value={this.state.firstName}
-            placeholder="Sue"
-            onChange={this.handleChange}
-          />
-          <Input 
-             type="text"
-             title="last name:"
-             id="input-lastName"
-             name="lastName"
-             value={this.state.lastName}
-             placeholder="Corson"
-             onChange={this.handleChange}
-          />
-          <Input 
-             type="text"
-             title="email:"
-             id="input-email"
-             name="email"
-             value={this.state.email}
-             placeholder="dwhalley@in.gov"
-             onChange={this.handleChange}
-          />
-          <Input 
-             type="text"
-             title="phone:"
-             id="input-phone"
-             name="phone"
-             value={this.state.phone}
-             placeholder="(612)211-6296"
-             onChange={this.handleChange}
-          />
+        <form className={classes} method="post">
+          <fieldset className="form-add__fieldset">
+            <div className="form-add__group">
+              <Label htmlFor="input-id"
+                title="id:" />
+              <Input type="text"
+                id="input-id"
+                name="id"
+                value={this.state.id}
+                placeholder="101"
+                onChange={this.handleChange} />
+            </div>
+            <div className="form-add__group">
+              <Label htmlFor="input-firstName"
+                title="first name:" />
+              <Input type="text"
+                id="input-firstName"
+                name="firstName"
+                value={this.state.firstName}
+                placeholder="Sue"
+                onChange={this.handleChange} />
+            </div>
+            <div className="form-add__group">
+              <Label htmlFor="input-lastName"
+                title="last name:" />
+              <Input type="text"
+                id="input-lastName"
+                name="lastName"
+                value={this.state.lastName}
+                placeholder="Corson"
+                onChange={this.handleChange} />
+            </div>
+            <div className="form-add__group">
+              <Label htmlFor="input-email"
+                title="email:" />
+              <Input type="text"
+                id="input-email"
+                name="email"
+                value={this.state.email}
+                placeholder="dwhalley@in.gov"
+                onChange={this.handleChange}/>
+            </div>
+            <div className="form-add__group">
+              <Label htmlFor="input-phone"
+                title="phone:" />
+              <Input  type="text"
+                id="input-phone"
+                name="phone"
+                value={this.state.phone}
+                placeholder="(612)211-6296"
+                onChange={this.handleChange} />
+            </div>
+          </fieldset>
+
           <Button 
             action="#"
             type="submit"
             title="Добавить в таблицу"
             disabled={!formValid}
-            onClick={this.handleSubmit}
-            />
+            onClick={this.handleSubmit}/>
         </form>
       </Fragment>
     );
