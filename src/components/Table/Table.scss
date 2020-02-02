@@ -1,0 +1,35 @@
+.data-table {
+  width: 70%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.data-table th,
+.data-table td {
+  padding: 5px;
+  padding-right: 40px;
+  border: 1px solid black;
+  border-spacing: 0;
+} 
+
+.data-table th {
+  text-align: left;
+  position: relative;
+  cursor: pointer;
+}
+.data-table th:after {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  content: "";
+  font-weight: normal;
+  font-style: italic;
+}
+
+.data-table th[data-sort="desc"]:after {
+  content: "desc";
+}
+
+.data-table th[data-sort="asc"]:after {
+  content: 'asc';
+}

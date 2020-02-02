@@ -1,0 +1,23 @@
+.form-add {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 20px;
+  padding-left: 0;
+
+  &__group {
+    display: flex;
+    justify-content: space-between;
+    width: 300px;
+    margin: 10px 0;
+  }
+
+  &__fieldset {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    padding-left: 0;
+    border: none;
+  }
+}

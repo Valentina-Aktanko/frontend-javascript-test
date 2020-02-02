@@ -1,3 +1,5 @@
+import './Table.scss';
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
@@ -20,10 +22,10 @@ export class Table extends Component {
     const fieldName = event.target.dataset.name;
     let direction = this.state[fieldName];
     
-    if (this.state[fieldName] === "none" || this.state[fieldName] === "asc") {
-      direction = "desc";
-    } else { 
+    if (this.state[fieldName] === "none" || this.state[fieldName] === "desc") {
       direction = "asc";
+    } else { 
+      direction = "desc";
     };
 
     this.setState({
