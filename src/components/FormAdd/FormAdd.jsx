@@ -11,8 +11,14 @@ import { Button } from 'components/Button';
 export class FormAdd extends Component {
 
   state = {
+    id: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+
     newData: {
-      id: null,
+      id: '',
       firstName: '',
       lastName: '',
       email: '',
@@ -38,13 +44,18 @@ export class FormAdd extends Component {
     const fieldName = event.target.name;
     const value = event.target.value;
 
-    this.setState(prevState => {
-      let newData = Object.assign({}, prevState.newData);
-      newData[fieldName] = value;
-      return { newData };
-    },
-    () => {this.validateField(fieldName, value)});
+    this.setState(prevState => ({
+      ...prevState,
+      [fieldName]: value,
+      newData: {
+        ...prevState.newData,
+        [fieldName]: value,
+      },
+    }), () => {this.validateField(fieldName, value)});
+    console.log(this.state);
   }
+
+
 
   validateField = (fieldName, value) => {
 
@@ -121,8 +132,7 @@ export class FormAdd extends Component {
       onSubmit(Object.assign({}, newData));
       
       this.setState({
-
-        id: null,
+        id: '',
         firstName: '',
         lastName: '',
         email: '',
@@ -142,6 +152,7 @@ export class FormAdd extends Component {
 
   render() {
     const { formValid } = this.state.validation;
+    const { id, firstName, lastName, email, phone } = this.state;
     const { className } = this.props;
     const classes = classNames('form', [className]);
     
@@ -155,7 +166,7 @@ export class FormAdd extends Component {
               <Input type="text"
                 id="input-id"
                 name="id"
-                value={this.state.id}
+                value={id}
                 placeholder="101"
                 onChange={this.handleChange} />
             </div>
@@ -165,7 +176,7 @@ export class FormAdd extends Component {
               <Input type="text"
                 id="input-firstName"
                 name="firstName"
-                value={this.state.firstName}
+                value={firstName}
                 placeholder="Sue"
                 onChange={this.handleChange} />
             </div>
@@ -175,7 +186,7 @@ export class FormAdd extends Component {
               <Input type="text"
                 id="input-lastName"
                 name="lastName"
-                value={this.state.lastName}
+                value={lastName}
                 placeholder="Corson"
                 onChange={this.handleChange} />
             </div>
@@ -185,7 +196,7 @@ export class FormAdd extends Component {
               <Input type="text"
                 id="input-email"
                 name="email"
-                value={this.state.email}
+                value={email}
                 placeholder="dwhalley@in.gov"
                 onChange={this.handleChange}/>
             </div>
@@ -195,14 +206,13 @@ export class FormAdd extends Component {
               <Input  type="text"
                 id="input-phone"
                 name="phone"
-                value={this.state.phone}
+                value={phone}
                 placeholder="(612)211-6296"
                 onChange={this.handleChange} />
             </div>
           </fieldset>
 
-          <Button 
-            action="#"
+          <Button action="#"
             type="submit"
             title="Добавить в таблицу"
             disabled={!formValid}

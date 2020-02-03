@@ -48,14 +48,14 @@ export class App extends Component {
     });
   }
 
-  handleSelectSize = (isSmall, isLarge) => {
-    this.setState(prevState => {
-      let address = prevState.address;
-      address = isSmall ? prevState.smallDataSet : prevState.largeDataSet;
-      console.log(address);
-      return { address };
-    });
-  }
+  // handleSelectSize = (isSmall, isLarge) => {
+  //   this.setState(prevState => {
+  //     let address = prevState.address;
+  //     address = isSmall ? prevState.smallDataSet : prevState.largeDataSet;
+  //     console.log(address);
+  //     return { address };
+  //   });
+  // }
 
   handleAddData = (newData) => {
 
