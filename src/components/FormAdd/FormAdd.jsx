@@ -52,38 +52,36 @@ export class FormAdd extends Component {
         [fieldName]: value,
       },
     }), () => {this.validateField(fieldName, value)});
-    console.log(this.state);
   }
-
-
 
   validateField = (fieldName, value) => {
 
     // Валидация не реализована, выполняется проверка на заполненность
+    // switch сделан для возможности валидации разных полей
     switch(fieldName) {
       case 'id':
-        this.setState({
+        this.setState(prevState => ({
           validation: {
-            ...this.state.validation,
+            ...prevState.validation,
             idValid: Boolean(value),
           }
-        });
+        }), () => {this.validateForm()});
         break;
       case 'firstName':
-        this.setState({
+        this.setState(prevState => ({
           validation: {
-            ...this.state.validation,
+            ...prevState.validation,
             firstNameValid: Boolean(value),
           }
-        });
+        }), () => {this.validateForm()});
         break;
       case 'lastName':
-        this.setState({
+        this.setState(prevState => ({
           validation: {
-            ...this.state.validation,
+            ...prevState.validation,
             lastNameValid: Boolean(value),
           }
-        });
+        }), () => {this.validateForm()});
         break;
       case 'email':
         this.setState(prevState => ({
@@ -99,11 +97,9 @@ export class FormAdd extends Component {
             ...prevState.validation,
             phoneValid: Boolean(value),
           }
-        }));
+        }), () => {this.validateForm()});
         break;
     }
-
-    this.validateForm();
   }
 
   validateForm = () => {
@@ -137,6 +133,14 @@ export class FormAdd extends Component {
         lastName: '',
         email: '',
         phone: '',
+
+        newData: {
+          id: '',
+          firstName: '',
+          lastName: '',
+          email: '',
+          phone: '',
+        },
 
         validation: {
           idValid: false,

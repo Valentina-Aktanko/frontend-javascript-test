@@ -2,7 +2,7 @@ import './App.scss';
 
 import React, { Component, Fragment  } from 'react';
 
-import { Intro } from 'components/Intro';
+import { Loader } from 'components/Loader';
 import { FormAdd } from 'components/FormAdd';
 import { Table } from 'components/Table';
 import { Button } from 'components/Button';
@@ -12,13 +12,14 @@ export class App extends Component {
     smallDataSet: "http://www.filltext.com/?rows=32&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}",
     largeDataSet: "http://www.filltext.com/?rows=1000&id={number|1000}&firstName={firstName}&delay=3&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}",
     
-    address: null,
+    address: '',
 
     error: null,
     isLoaded: false,
     
     showForm: false,
     userDataArray: [],
+    DataArray: [],
   }
 
   componentDidMount() {
@@ -48,14 +49,13 @@ export class App extends Component {
     });
   }
 
-  // handleSelectSize = (isSmall, isLarge) => {
-  //   this.setState(prevState => {
-  //     let address = prevState.address;
-  //     address = isSmall ? prevState.smallDataSet : prevState.largeDataSet;
-  //     console.log(address);
-  //     return { address };
-  //   });
-  // }
+  handleSelectAddress = (selectedAddress) => {
+    this.setState(prevState => {
+      let address = prevState.address;
+      address = selectedAddress;
+      return { address };
+    });
+  }
 
   handleAddData = (newData) => {
 
@@ -110,30 +110,31 @@ export class App extends Component {
   }
 
   render() {
-    const {  address, addressMax, error, isLoaded, showForm, userDataArray} = this.state;
-    
-      // <Intro onSubmit={this.handleSelectSize} />
+    const {  address, error, isLoaded, showForm, userDataArray } = this.state;
+    let pages = Math.ceil(userDataArray.length / 50);
+
+      // return <Loader onSubmit={this.handleSelectAddress} />;
     if (error) {
       return <div>Ошибка: {error.message}</div>
     } else if (!isLoaded) {
       return <div className="async-spinner"></div>
     } else {
-      return (
-        <Fragment>
-          <div className="container">
-            <Button 
-              className="button"
-              type="button"
-              title="Добавить"
-              onClick={this.handleClick}
-            />
-            {showForm && (
-              <FormAdd className="form-add" onSubmit={this.handleAddData}/>
-            )}
-            <Table userDataArray={userDataArray} onClick={this.handleSorting}/>
-          </div>
-        </Fragment>
-      );
+        return (
+          <Fragment>
+            <div className="container">
+              <Button 
+                className="button"
+                type="button"
+                title="Добавить"
+                onClick={this.handleClick}
+              />
+              {showForm && (
+                <FormAdd className="form-add" onSubmit={this.handleAddData}/>
+              )}
+              <Table userDataArray={userDataArray} onClick={this.handleSorting}/>
+            </div>
+          </Fragment>
+        );
     }
   }
 }
