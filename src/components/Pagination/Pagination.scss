@@ -1,0 +1,34 @@
+.pagination {
+  list-style: none;
+  display: flex;
+  border: 1px solid red;
+  padding: 3px;
+	margin: 3px;
+
+  &__item a {
+    display: block;
+    padding: 2px 5px 2px 5px;
+    margin: 2px;
+    border: 1px solid #aaaadd;
+    color: #000099;
+    text-decoration: none;
+  }
+
+  &__item--current a {
+    border: 1px solid #000099;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #000099;
+  }
+  
+  &__item--disabled a {
+    border: 1px solid #eeeeee;
+		color: #dddddd;
+  }
+  
+  &__item:not(&__item--disabled) a:hover,
+  &__item:not(&__item--disabled) a:active {
+    border: 1px solid #000099;
+	  color: #000000;
+  }
+}

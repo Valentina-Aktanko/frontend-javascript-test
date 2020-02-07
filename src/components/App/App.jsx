@@ -6,6 +6,7 @@ import { Loader } from 'components/Loader';
 import { FormAdd } from 'components/FormAdd';
 import { Table } from 'components/Table';
 import { Button } from 'components/Button';
+import { Pagination } from 'components/Pagination';
 
 export class App extends Component {
   state = {
@@ -19,11 +20,17 @@ export class App extends Component {
     
     showForm: false,
     userDataArray: [],
-    DataArray: [],
+
+    currentPage: 1,
+    totalItems: 0,
+    limit: 20,
+    pages: 1,
+    start: 0,
+    end: 0,
   }
 
   componentDidMount() {
-    const { smallDataSet } = this.state;
+    const { smallDataSet, currentPage, limit } = this.state;
     
     fetch(smallDataSet)
     .then(res => res.json())
@@ -32,6 +39,10 @@ export class App extends Component {
         this.setState({
           isLoaded: true,
           userDataArray: result,
+          totalItems: result.length,
+          pages: Math.ceil(result.length / limit),
+          start: (currentPage - 1) * limit,
+          end: (currentPage * limit) - 1,
         });
       },
       (error) => {
@@ -109,11 +120,13 @@ export class App extends Component {
     });
   }
 
-  render() {
-    const {  address, error, isLoaded, showForm, userDataArray } = this.state;
-    let pages = Math.ceil(userDataArray.length / 50);
+  handleTogglePage = () => {
+    console.log('Toggle page!');
+  }
 
-      // return <Loader onSubmit={this.handleSelectAddress} />;
+  render() {
+    const {  error, isLoaded, showForm, userDataArray, currentPage, totalItems, limit, pages, start, end } = this.state;
+
     if (error) {
       return <div>Ошибка: {error.message}</div>
     } else if (!isLoaded) {
@@ -131,8 +144,15 @@ export class App extends Component {
               {showForm && (
                 <FormAdd className="form-add" onSubmit={this.handleAddData}/>
               )}
-              <Table userDataArray={userDataArray} onClick={this.handleSorting}/>
-            </div>
+              <Table userDataArray={userDataArray.slice(0, limit)} onClick={this.handleSorting}/>
+              {pages > 1 && (
+                <Pagination 
+                  currentPage={currentPage}
+                  totalItems={totalItems}
+                  limit={limit}
+                  onClick={this.handleTogglePage} />
+              )}
+              </div>
           </Fragment>
         );
     }
