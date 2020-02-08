@@ -55,27 +55,78 @@ export class Pagination extends Component {
     let lpm1 = lastpage - 1;
     let start	
     
-    console.log(`currentPage = ${currentPage}, totalItems = ${totalItems}, limit= ${limit}, adjacents=${adjacents} onClick= ${onClick}`);
+    console.log(`currentPage = ${currentPage}, totalItems = ${totalItems}, limit= ${limit}, adjacents=${adjacents} onClick=${onClick}`);
 
-    if (currentPage > 1) {
+    return (
+      <ul className="pagination">
+        {/* {this.createPagination(currentPage)} */}
+        <PrevArrow currentPage={currentPage}/>
+        <PageItems 
+          currentPage={currentPage}
+          lastpage={lastpage}
+          adjacents={adjacents}
+        />
+        
+      </ul>
+    );
+  }
+}
+
+export class PrevArrow extends Component {
+  
+  static propTypes =  {
+    currentPage: PropTypes.number.isRequired,
+  }
+
+  render() {
+    const { currentPage } = this.props;
+
+    if (currentPage === 1) {
       return (
-        <ul className="pagination">
-          <li className="pagination__item"><a href="#">Назад</a></li>
-          
-        </ul>
-        );
+        <li className="pagination__item pagination__item--disabled">
+          <a>Назад</a>
+        </li>
+      );
+    } else if (currentPage > 1) {
+      return (
+        <li className="pagination__item">
+          <a href="#">Назад</a>
+        </li>
+      );
     }
-    else if (currentPage == 1) {
-      return (
-        <ul className="pagination">
-          <li className="pagination__item pagination__item--disabled"><a>Назад</a></li>
-          
-          <li className="pagination__item pagination__item--current"><a>1</a></li>
-          <li className="pagination__item"><a href="#">2</a></li>
-          <li className="pagination__item"><a href="#">3</a></li>
-          <li className="pagination__item"><a href="#">4</a></li>
-        </ul>
-        );
+  }
+}
+
+export class PageItems extends Component {
+  
+  static propTypes =  {
+    currentPage: PropTypes.number.isRequired,
+    lastpage: PropTypes.number.isRequired,
+    adjacents: PropTypes.number.isRequired,
+  }
+
+  render() {
+    const { currentPage, lastpage, adjacents } = this.props;
+    let pageItems = [];
+
+    if (lastpage < 7 + (adjacents * 2))	{ //недостаточно страниц, чтобы ломать голову
+			for (let counter = 1; counter <= lastpage; counter++) {
+				if (counter == currentPage) {
+          pageItems.push(
+            <li className="pagination__item pagination__item--current">
+              <a>{counter}</a>
+            </li>);
+        }
+        else {
+          pageItems.push(
+            <li className="pagination__item">
+              <a  href="#">{counter}</a>
+            </li>);
+        }
+      }
+
+      return pageItems;
+
     }
   }
 }

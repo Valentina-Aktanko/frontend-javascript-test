@@ -1,12 +1,18 @@
 .pagination {
-  list-style: none;
   display: flex;
-  border: 1px solid red;
-  padding: 3px;
-	margin: 3px;
+  padding: 0;
+	margin: 0;
+  list-style: none;
+
+  // .pagination 
+
+  &__item:first-child {
+    padding-left: 0;
+    margin-left: 0;
+  }
 
   &__item a {
-    display: block;
+    display: inline-block;
     padding: 2px 5px 2px 5px;
     margin: 2px;
     border: 1px solid #aaaadd;
@@ -26,9 +32,10 @@
 		color: #dddddd;
   }
   
-  &__item:not(&__item--disabled) a:hover,
-  &__item:not(&__item--disabled) a:active {
+  &__item a[href]:hover,
+  &__item a[href]:active {
     border: 1px solid #000099;
 	  color: #000000;
   }
+
 }

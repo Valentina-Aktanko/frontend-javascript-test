@@ -11,7 +11,7 @@ import { Pagination } from 'components/Pagination';
 export class App extends Component {
   state = {
     smallDataSet: "http://www.filltext.com/?rows=32&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}",
-    largeDataSet: "http://www.filltext.com/?rows=1000&id={number|1000}&firstName={firstName}&delay=3&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}",
+    bigDataSet: "http://www.filltext.com/?rows=1000&id={number|1000}&firstName={firstName}&delay=3&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}",
     
     address: '',
 
@@ -23,16 +23,16 @@ export class App extends Component {
 
     currentPage: 1,
     totalItems: 0,
-    limit: 20,
+    limit: 150,
     pages: 1,
     start: 0,
     end: 0,
   }
 
   componentDidMount() {
-    const { smallDataSet, currentPage, limit } = this.state;
+    const { bigDataSet, currentPage, limit } = this.state;
     
-    fetch(smallDataSet)
+    fetch(bigDataSet)
     .then(res => res.json())
     .then(
       (result) => {
