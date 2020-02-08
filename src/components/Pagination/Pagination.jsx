@@ -138,9 +138,58 @@ export class PageItems extends Component {
           </li>
         );
       }
+      //середина, скрыть немного в начале и немного в конце
+			else if(lastPage - (adjacents * 2) > currentPage && currentPage > (adjacents * 2)) {
+        pageItems.push(
+          <li className="pagination__item">
+            <a href="#">1</a>
+          </li>
+        );
+        pageItems.push(
+          <li className="pagination__item">
+            <a href="#">2</a>
+          </li>
+        );
+        pageItems.push(
+          <li className="pagination__item pagination__elipses">
+            <a>...</a>
+          </li>
+        );
+				for (let counter = currentPage - adjacents; counter <= currentPage + adjacents; counter++)
+				{
+					if (counter == currentPage) {
+            pageItems.push(
+              <li className="pagination__item pagination__item--current">
+                <a  href="#">{counter}</a>
+              </li>
+            );
+          } else {
+            pageItems.push(
+              <li className="pagination__item">
+                <a  href="#">{counter}</a>
+              </li>
+            );
+          }
+        }
+        pageItems.push(
+          <li className="pagination__item pagination__elipses">
+            <a>...</a>
+          </li>
+        );
+        pageItems.push(
+          <li className="pagination__item">
+            <a href="#">{lastPageMinusOne}</a>
+          </li>
+        );
+        pageItems.push(
+          <li className="pagination__item">
+            <a href="#">{lastPage}</a>
+          </li>
+        );
+			}
     }
 
     return pageItems;
-    
+
   }
 }
