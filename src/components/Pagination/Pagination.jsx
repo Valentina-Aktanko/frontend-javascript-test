@@ -24,26 +24,6 @@ export class Pagination extends Component {
   };
 
   handleClick = (event) => {
-    // const { onClick } = this.props;
-    // const fieldName = event.target.dataset.name;
-    // let direction = this.state[fieldName];
-    
-    // if (this.state[fieldName] === "none" || this.state[fieldName] === "desc") {
-    //   direction = "asc";
-    // } else { 
-    //   direction = "desc";
-    // };
-
-    // this.setState({
-    //   id: "none",
-    //   firstName: "none",
-    //   lastName: "none",
-    //   email: "none",
-    //   phone: "none",
-    //   [fieldName]: direction,
-    // }, () => {
-    //   onClick(fieldName, direction);
-    // });
   }
 
   render() {
@@ -51,19 +31,15 @@ export class Pagination extends Component {
     let targetpage = "/";
     let prev = currentPage - 1;			
     let next = currentPage + 1;
-    let lastpage = Math.ceil(totalItems / limit);			
-    let lpm1 = lastpage - 1;
-    let start	
+    let lastPage = Math.ceil(totalItems / limit);			
+    // let start	
     
-    console.log(`currentPage = ${currentPage}, totalItems = ${totalItems}, limit= ${limit}, adjacents=${adjacents} onClick=${onClick}`);
-
     return (
       <ul className="pagination">
-        {/* {this.createPagination(currentPage)} */}
         <PrevArrow currentPage={currentPage}/>
         <PageItems 
           currentPage={currentPage}
-          lastpage={lastpage}
+          lastPage={lastPage}
           adjacents={adjacents}
         />
         
@@ -101,32 +77,70 @@ export class PageItems extends Component {
   
   static propTypes =  {
     currentPage: PropTypes.number.isRequired,
-    lastpage: PropTypes.number.isRequired,
+    lastPage: PropTypes.number.isRequired,
     adjacents: PropTypes.number.isRequired,
   }
 
   render() {
-    const { currentPage, lastpage, adjacents } = this.props;
+    const { currentPage, lastPage, adjacents } = this.props;
+    const lastPageMinusOne = lastPage - 1;
     let pageItems = [];
 
-    if (lastpage < 7 + (adjacents * 2))	{ //недостаточно страниц, чтобы ломать голову
-			for (let counter = 1; counter <= lastpage; counter++) {
+    if (lastPage < 7 + (adjacents * 2))	{ //недостаточно страниц, чтобы ломать голову
+			for (let counter = 1; counter <= lastPage; counter++) {
 				if (counter == currentPage) {
           pageItems.push(
             <li className="pagination__item pagination__item--current">
               <a>{counter}</a>
-            </li>);
+            </li>
+          );
         }
         else {
           pageItems.push(
             <li className="pagination__item">
               <a  href="#">{counter}</a>
-            </li>);
+            </li>
+          );
         }
       }
-
-      return pageItems;
-
+      
+    } else if(lastPage >= 7 + (adjacents * 2)) {	//достаточно страниц, чтобы скрыть некоторые
+      // начало, скрыть только более поздние страницы
+      if(currentPage < 1 + (adjacents * 3)) {
+        for (let counter = 1; counter < 4 + (adjacents * 2); counter++) {
+          if (counter == currentPage) {
+            pageItems.push(
+              <li className="pagination__item pagination__item--current">
+                <a  href="#">{counter}</a>
+              </li>
+            );
+          } else {
+            pageItems.push(
+              <li className="pagination__item">
+                <a  href="#">{counter}</a>
+              </li>
+            );
+          }
+        }
+        pageItems.push(
+          <li className="pagination__item pagination__elipses">
+            <a>...</a>
+          </li>
+        );
+        pageItems.push(
+          <li className="pagination__item">
+            <a href="#">{lastPageMinusOne}</a>
+          </li>
+        );
+        pageItems.push(
+          <li className="pagination__item">
+            <a href="#">{lastPage}</a>
+          </li>
+        );
+      }
     }
+
+    return pageItems;
+    
   }
 }

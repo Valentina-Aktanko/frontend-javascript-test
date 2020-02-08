@@ -23,7 +23,7 @@ export class App extends Component {
 
     currentPage: 1,
     totalItems: 0,
-    limit: 150,
+    limit: 50,
     pages: 1,
     start: 0,
     end: 0,
