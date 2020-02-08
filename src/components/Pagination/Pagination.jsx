@@ -37,13 +37,16 @@ export class Pagination extends Component {
     
     return (
       <ul className="pagination">
-        <PrevArrow currentPage={currentPage}/>
+        <PrevArrow 
+          currentPage={currentPage}/>
         <PageItems 
           currentPage={currentPage}
           lastPage={lastPage}
           adjacents={adjacents}
         />
-        
+        <NextArrow 
+          currentPage={currentPage}
+          lastPage={lastPage}/>
       </ul>
     );
   }
@@ -170,5 +173,30 @@ export class PageItems extends Component {
 
     return pageItems;
 
+  }
+}
+
+export class NextArrow extends Component {
+  
+  static propTypes =  {
+    currentPage: PropTypes.number.isRequired,
+  }
+
+  render() {
+    const { currentPage, lastPage } = this.props;
+
+    if (currentPage === lastPage) {
+      return (
+        <li className="pagination__item pagination__item--disabled">
+          <a>Вперед</a>
+        </li>
+      );
+    } else {
+      return (
+        <li className="pagination__item">
+          <a href="#">Вперед</a>
+        </li>
+      );
+    }
   }
 }
