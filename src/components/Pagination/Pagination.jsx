@@ -86,19 +86,20 @@ export class PageItems extends Component {
     const classes = classNames('pagination__item', [className]);
 
     if (className === 'pagination__item--current' || className === 'pagination__elipses') {
-      pageItems.push(
-        <li className={classes}>
+      pageItems.push( 
+        <li key={pageItems.length} // наверное, странный ключ. Но лучше пока ничего не придумалось
+            className={classes}>
           <a>{counter}</a>
         </li>
       );
     } else if (className === '') {
       pageItems.push(
-        <li className={classes}>
+        <li key={pageItems.length}
+            className={classes}>
           <a href="#">{counter}</a>
         </li>
       );
     }
-    
     return pageItems;
   }
 
@@ -133,7 +134,7 @@ export class PageItems extends Component {
         this.addPage(pageItems, '', lastPage);
       }
 
-      //середина, скрыть немного в начале и немного в конце
+      // находимся в середине, скрыть немного в начале и немного в конце
 			else if(lastPage - (adjacents * 2) > currentPage && currentPage > (adjacents * 2)) {
         this.addPage(pageItems, '', 1);
         this.addPage(pageItems, '', 2);
@@ -149,6 +150,21 @@ export class PageItems extends Component {
         this.addPage(pageItems, 'pagination__elipses', '...');
         this.addPage(pageItems, '', lastPageMinusOne);
         this.addPage(pageItems, '', lastPage);
+      }
+      
+      // находимся в конце, скрыть только более ранние страницы
+			else {
+				this.addPage(pageItems, '', 1);
+        this.addPage(pageItems, '', 2);
+				this.addPage(pageItems, 'pagination__elipses', '...');
+				for (let counter = lastPage - (1 + (adjacents * 3)); counter <= lastPage; counter++)
+				{
+					if (counter == currentPage) {
+            this.addPage(pageItems, 'pagination__item--current', counter);
+          } else {
+            this.addPage(pageItems, '', counter);
+          }
+				}
 			}
     }
 

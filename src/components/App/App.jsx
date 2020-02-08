@@ -21,7 +21,7 @@ export class App extends Component {
     showForm: false,
     userDataArray: [],
 
-    currentPage: 10,
+    currentPage: 18,
     totalItems: 0,
     limit: 50,
     pages: 1,
