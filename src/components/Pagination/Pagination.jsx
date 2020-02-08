@@ -2,6 +2,7 @@ import './Pagination.scss';
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 // import { PaginationItems } from 'components/PaginationItems';
 
@@ -81,6 +82,26 @@ export class PageItems extends Component {
     adjacents: PropTypes.number.isRequired,
   }
 
+  addPage(pageItems, className, counter) {
+    const classes = classNames('pagination__item', [className]);
+
+    if (className === 'pagination__item--current' || className === 'pagination__elipses') {
+      pageItems.push(
+        <li className={classes}>
+          <a>{counter}</a>
+        </li>
+      );
+    } else if (className === '') {
+      pageItems.push(
+        <li className={classes}>
+          <a href="#">{counter}</a>
+        </li>
+      );
+    }
+    
+    return pageItems;
+  }
+
   render() {
     const { currentPage, lastPage, adjacents } = this.props;
     const lastPageMinusOne = lastPage - 1;
@@ -89,103 +110,45 @@ export class PageItems extends Component {
     if (lastPage < 7 + (adjacents * 2))	{ //недостаточно страниц, чтобы ломать голову
 			for (let counter = 1; counter <= lastPage; counter++) {
 				if (counter == currentPage) {
-          pageItems.push(
-            <li className="pagination__item pagination__item--current">
-              <a>{counter}</a>
-            </li>
-          );
+          this.addPage(pageItems, 'pagination__item--current', counter);
         }
         else {
-          pageItems.push(
-            <li className="pagination__item">
-              <a  href="#">{counter}</a>
-            </li>
-          );
+          this.addPage(pageItems, '', counter);
         }
       }
       
-    } else if(lastPage >= 7 + (adjacents * 2)) {	//достаточно страниц, чтобы скрыть некоторые
-      // начало, скрыть только более поздние страницы
+    } else if(lastPage >= 7 + (adjacents * 2)) {	//страниц достаточно, чтобы скрыть некоторые
+      
+      // находимся в начале, скрыть только более поздние страницы
       if(currentPage < 1 + (adjacents * 3)) {
         for (let counter = 1; counter < 4 + (adjacents * 2); counter++) {
           if (counter == currentPage) {
-            pageItems.push(
-              <li className="pagination__item pagination__item--current">
-                <a  href="#">{counter}</a>
-              </li>
-            );
+            this.addPage(pageItems, 'pagination__item--current', counter);
           } else {
-            pageItems.push(
-              <li className="pagination__item">
-                <a  href="#">{counter}</a>
-              </li>
-            );
+            this.addPage(pageItems, '', counter);
           }
         }
-        pageItems.push(
-          <li className="pagination__item pagination__elipses">
-            <a>...</a>
-          </li>
-        );
-        pageItems.push(
-          <li className="pagination__item">
-            <a href="#">{lastPageMinusOne}</a>
-          </li>
-        );
-        pageItems.push(
-          <li className="pagination__item">
-            <a href="#">{lastPage}</a>
-          </li>
-        );
+        this.addPage(pageItems, 'pagination__elipses', '...');
+        this.addPage(pageItems, '', lastPageMinusOne);
+        this.addPage(pageItems, '', lastPage);
       }
+
       //середина, скрыть немного в начале и немного в конце
 			else if(lastPage - (adjacents * 2) > currentPage && currentPage > (adjacents * 2)) {
-        pageItems.push(
-          <li className="pagination__item">
-            <a href="#">1</a>
-          </li>
-        );
-        pageItems.push(
-          <li className="pagination__item">
-            <a href="#">2</a>
-          </li>
-        );
-        pageItems.push(
-          <li className="pagination__item pagination__elipses">
-            <a>...</a>
-          </li>
-        );
+        this.addPage(pageItems, '', 1);
+        this.addPage(pageItems, '', 2);
+        this.addPage(pageItems, 'pagination__elipses', '...');
 				for (let counter = currentPage - adjacents; counter <= currentPage + adjacents; counter++)
 				{
 					if (counter == currentPage) {
-            pageItems.push(
-              <li className="pagination__item pagination__item--current">
-                <a  href="#">{counter}</a>
-              </li>
-            );
+            this.addPage(pageItems, 'pagination__item--current', counter);
           } else {
-            pageItems.push(
-              <li className="pagination__item">
-                <a  href="#">{counter}</a>
-              </li>
-            );
+            this.addPage(pageItems, '', counter);
           }
         }
-        pageItems.push(
-          <li className="pagination__item pagination__elipses">
-            <a>...</a>
-          </li>
-        );
-        pageItems.push(
-          <li className="pagination__item">
-            <a href="#">{lastPageMinusOne}</a>
-          </li>
-        );
-        pageItems.push(
-          <li className="pagination__item">
-            <a href="#">{lastPage}</a>
-          </li>
-        );
+        this.addPage(pageItems, 'pagination__elipses', '...');
+        this.addPage(pageItems, '', lastPageMinusOne);
+        this.addPage(pageItems, '', lastPage);
 			}
     }
 
