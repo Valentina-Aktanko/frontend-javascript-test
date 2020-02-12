@@ -115,7 +115,7 @@ export class App extends Component {
     });
   }
 
-  handleChangepageNum = (arrowBtn) => {
+  handleChangePageNum = (btnContent) => {
 
     this.setState(prevState => {
       let pageNum = prevState.pageNum;
@@ -123,11 +123,14 @@ export class App extends Component {
       let dataArray = prevState.dataArray;
       let pageCount = prevState.pageCount;
   
-      if (arrowBtn === "nextPage") {
+      if (btnContent === "nextPage") {
         pageNum = pageNum + 1;
-      } else if (arrowBtn === "prevPage") {
+      } else if (btnContent === "prevPage") {
         pageNum = pageNum - 1;
-      }
+      } else if (typeof btnContent === "number" && !isNaN(btnContent)) {
+        pageNum = btnContent;
+      } else pageNum = pageNum;
+
       sliceDataArray = dataArray.slice((pageNum - 1) * pageCount, pageNum * pageCount);
           
       return { pageNum, sliceDataArray };
@@ -161,7 +164,7 @@ export class App extends Component {
                   pages={pages}
                   pageCount={pageCount}
                   adjacents={1}
-                  onClickArrow={this.handleChangepageNum} />
+                  onClick={this.handleChangePageNum} />
               )}
               </div>
           </Fragment>

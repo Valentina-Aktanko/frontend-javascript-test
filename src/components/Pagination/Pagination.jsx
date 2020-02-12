@@ -13,7 +13,7 @@ export class Pagination extends Component {
     pages: PropTypes.number.isRequired,
     pageCount: PropTypes.number,
     adjacents: PropTypes.number,
-    onClickArrow: PropTypes.func,
+    onClick: PropTypes.func,
   }
 
   static defaultProps = {
@@ -21,30 +21,26 @@ export class Pagination extends Component {
     adjacents: 1,
   };
 
-  handleClick = (event) => {
-  }
-
-  handleClickArrow = (event) => {
-
-  }
-
   render() {
-    const { pageNum, pages, pageCount, adjacents, onClickArrow } = this.props;
+    const { pageNum, pages, adjacents, onClick } = this.props;
     
     return (
       <ul className="pagination">
         <PrevArrow 
           pageNum={pageNum}
-          onClick={onClickArrow}/>
+          onClick={onClick}
+        />
         <PageItems 
           pageNum={pageNum}
           pages={pages}
           adjacents={adjacents}
+          onClick={onClick}
         />
         <NextArrow 
           pageNum={pageNum}
           pages={pages}
-          onClick={onClickArrow}/>
+          onClick={onClick}
+        />
       </ul>
     );
   }
@@ -131,6 +127,16 @@ export class PageItems extends Component {
     adjacents: PropTypes.number.isRequired,
   }
 
+  handleClick = (event) => {
+    const { onClick } = this.props;
+
+    event.preventDefault();
+
+    if (typeof onClick === 'function') {
+      onClick(+event.target.textContent);
+    }
+  }
+
   addPage(pageItems, className, counter) {
     const classes = classNames('pagination__item', [className]);
 
@@ -145,7 +151,7 @@ export class PageItems extends Component {
       pageItems.push(
         <li key={pageItems.length}
             className={classes}>
-          <a href="#">{counter}</a>
+          <a href="#" onClick={this.handleClick}>{counter}</a>
         </li>
       );
     }
