@@ -1,6 +1,6 @@
 import './FormAdd.scss';
 
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
@@ -161,7 +161,7 @@ export class FormAdd extends Component {
     const classes = classNames('form', [className]);
     
     return (
-      <Fragment>
+      <div>
         <form className={classes} method="post">
           <fieldset className="form-add__fieldset">
             <div className="form-add__group">
@@ -222,7 +222,7 @@ export class FormAdd extends Component {
             disabled={!formValid}
             onClick={this.handleSubmit}/>
         </form>
-      </Fragment>
+      </div>
     );
   }
 }

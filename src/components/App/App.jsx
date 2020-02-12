@@ -1,9 +1,10 @@
 import './App.scss';
 
-import React, { Component, Fragment  } from 'react';
+import React, { Component  } from 'react';
 
 import { Loader } from 'components/Loader';
 import { FormAdd } from 'components/FormAdd';
+import { FormSearch } from 'components/FormSearch';
 import { Table } from 'components/Table';
 import { Button } from 'components/Button';
 import { Pagination } from 'components/Pagination';
@@ -18,7 +19,8 @@ export class App extends Component {
     error: null,
     isLoaded: false,
     
-    showForm: false,
+    showAddForm: false,
+    showSearchForm: false,
     dataArray: [],
     sliceDataArray: [],
 
@@ -28,9 +30,9 @@ export class App extends Component {
   }
 
   componentDidMount() {
-    const { bigDataSet, pageNum, pageCount } = this.state;
+    const { smallDataSet, pageNum, pageCount } = this.state;
     
-    fetch(bigDataSet)
+    fetch(smallDataSet)
     .then(res => res.json())
     .then(
       (result) => {
@@ -50,9 +52,15 @@ export class App extends Component {
     )
   }
 
-  handleClick = () => {
+  handleShowAddForm = () => {
     this.setState({
-      showForm : !this.state.showForm,
+      showAddForm : !this.state.showAddForm,
+    });
+  }
+
+  handleShowSearchForm = () => {
+    this.setState({
+      showSearchForm : !this.state.showSearchForm,
     });
   }
 
@@ -67,25 +75,41 @@ export class App extends Component {
   handleAddData = (newData) => {
     this.setState(prevState => {
       let dataArray = prevState.dataArray;
+      let sliceDataArray = prevState.sliceDataArray;
       
       dataArray.unshift(newData);
-      return { dataArray };
+      sliceDataArray.unshift(newData);
+      return { dataArray, sliceDataArray };
+    });
+  }
+
+  handleSearchData = (searchText) => {
+    
+    this.setState(prevState => {
+      let sliceDataArray = prevState.sliceDataArray;
+      let someUsers = sliceDataArray.filter(item => item.id < searchText
+        // item.id.includes(searchText);
+      );
+      console.log(this.state);
+      
+      sliceDataArray  = someUsers;
+      return { sliceDataArray };
     });
   }
 
   handleSorting = (fieldName, direction) => {
-    let { dataArray } = this.state;
+    let { sliceDataArray } = this.state;
 
     if (fieldName === 'id' && direction === "asc") {
-      dataArray.sort(function(a, b) {
+      sliceDataArray.sort(function(a, b) {
         return a[fieldName] - b[fieldName];
       });
     } else if (fieldName === 'id' && direction === "desc") {
-      dataArray.sort(function(a, b) {
+      sliceDataArray.sort(function(a, b) {
         return b[fieldName] - a[fieldName];
       });
     } else if (fieldName !== 'id' && direction === "asc") {
-      dataArray.sort(function(a, b) {
+      sliceDataArray.sort(function(a, b) {
         let nameA = a[fieldName].toLowerCase();
         let nameB = b[fieldName].toLowerCase();
         if (nameA < nameB) {
@@ -97,7 +121,7 @@ export class App extends Component {
         }
       });
     } else if (fieldName !== 'id' && direction === "desc") {
-      dataArray.sort(function(a, b) {
+      sliceDataArray.sort(function(a, b) {
         let nameA = a[fieldName].toLowerCase();
         let nameB = b[fieldName].toLowerCase();
         if (nameB < nameA) {
@@ -111,7 +135,7 @@ export class App extends Component {
     } else console.log("Ошибка сортировки");
 
     this.setState({
-      dataArray: dataArray,
+      sliceDataArray: sliceDataArray,
     });
   }
 
@@ -138,7 +162,7 @@ export class App extends Component {
   }
 
   render() {
-    const {  error, isLoaded, showForm, pageNum, pageCount, pages, sliceDataArray } = this.state;
+    const {  error, isLoaded, showAddForm, showSearchForm, pageNum, pageCount, pages, sliceDataArray } = this.state;
 
     if (error) {
       return <div>Ошибка: {error.message}</div>
@@ -146,18 +170,27 @@ export class App extends Component {
       return <div className="async-spinner"></div>
     } else {
         return (
-          <Fragment>
+          <div>
             <div className="container">
               <Button 
                 className="button"
                 type="button"
                 title="Добавить"
-                onClick={this.handleClick}
+                onClick={this.handleShowAddForm}
               />
-              {showForm && (
-                <FormAdd className="form-add" onSubmit={this.handleAddData}/>
+              {showAddForm && (
+                <FormAdd className="form-add" onSubmit={this.handleAddData} />
               )}
-              <Table dataArray={sliceDataArray} onClick={this.handleSorting}/>
+              <Button 
+                className="button"
+                type="button"
+                title="Найти"
+                onClick={this.handleShowSearchForm}
+              />
+              {showSearchForm && (
+                <FormSearch className="form-search" onSubmit={this.handleSearchData} />
+              )}
+              <Table dataArray={sliceDataArray} onClick={this.handleSorting} />
               {pages > 1 && (
                 <Pagination 
                   pageNum={pageNum}
@@ -167,7 +200,7 @@ export class App extends Component {
                   onClick={this.handleChangePageNum} />
               )}
               </div>
-          </Fragment>
+          </div>
         );
     }
   }
