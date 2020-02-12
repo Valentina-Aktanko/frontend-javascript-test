@@ -13,7 +13,7 @@ export class Table extends Component {
   }
 
   static propTypes =  {
-    userDataArray: PropTypes.array.isRequired,
+    dataArray: PropTypes.array.isRequired,
     onClick: PropTypes.func.isRequired,
   }
 
@@ -53,7 +53,7 @@ export class Table extends Component {
   }
 
   render() {
-    const { userDataArray, handleTableSorting } = this.props;
+    const { dataArray, handleTableSorting } = this.props;
 
     return (
         <table className="data-table">
@@ -96,7 +96,7 @@ export class Table extends Component {
             </tr>
           </thead>
           <tbody>
-            {userDataArray.map((userData, idx) => this.renderRow(userData, idx))}
+            {dataArray.map((userData, idx) => this.renderRow(userData, idx))}
           </tbody>
         </table>
       );

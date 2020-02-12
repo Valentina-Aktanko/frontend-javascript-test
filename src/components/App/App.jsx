@@ -19,18 +19,16 @@ export class App extends Component {
     isLoaded: false,
     
     showForm: false,
-    userDataArray: [],
+    dataArray: [],
+    sliceDataArray: [],
 
-    currentPage: 20,
-    totalItems: 0,
-    limit: 50,
+    pageNum: 1,
+    pageCount: 50,
     pages: 1,
-    start: 0,
-    end: 0,
   }
 
   componentDidMount() {
-    const { bigDataSet, currentPage, limit } = this.state;
+    const { bigDataSet, pageNum, pageCount } = this.state;
     
     fetch(bigDataSet)
     .then(res => res.json())
@@ -38,11 +36,9 @@ export class App extends Component {
       (result) => {
         this.setState({
           isLoaded: true,
-          userDataArray: result,
-          totalItems: result.length,
-          pages: Math.ceil(result.length / limit),
-          start: (currentPage - 1) * limit,
-          end: (currentPage * limit) - 1,
+          dataArray: result,
+          pages: Math.ceil(result.length / pageCount),
+          sliceDataArray: result.slice((pageNum - 1) * pageCount, pageNum * pageCount),
         });
       },
       (error) => {
@@ -69,28 +65,27 @@ export class App extends Component {
   }
 
   handleAddData = (newData) => {
-
     this.setState(prevState => {
-      let userDataArray = prevState.userDataArray;
+      let dataArray = prevState.dataArray;
       
-      userDataArray.unshift(newData);
-      return { userDataArray };
+      dataArray.unshift(newData);
+      return { dataArray };
     });
   }
 
   handleSorting = (fieldName, direction) => {
-    let { userDataArray } = this.state;
+    let { dataArray } = this.state;
 
     if (fieldName === 'id' && direction === "asc") {
-      userDataArray.sort(function(a, b) {
+      dataArray.sort(function(a, b) {
         return a[fieldName] - b[fieldName];
       });
     } else if (fieldName === 'id' && direction === "desc") {
-      userDataArray.sort(function(a, b) {
+      dataArray.sort(function(a, b) {
         return b[fieldName] - a[fieldName];
       });
     } else if (fieldName !== 'id' && direction === "asc") {
-      userDataArray.sort(function(a, b) {
+      dataArray.sort(function(a, b) {
         let nameA = a[fieldName].toLowerCase();
         let nameB = b[fieldName].toLowerCase();
         if (nameA < nameB) {
@@ -102,7 +97,7 @@ export class App extends Component {
         }
       });
     } else if (fieldName !== 'id' && direction === "desc") {
-      userDataArray.sort(function(a, b) {
+      dataArray.sort(function(a, b) {
         let nameA = a[fieldName].toLowerCase();
         let nameB = b[fieldName].toLowerCase();
         if (nameB < nameA) {
@@ -116,16 +111,31 @@ export class App extends Component {
     } else console.log("Ошибка сортировки");
 
     this.setState({
-      userDataArray: userDataArray,
+      dataArray: dataArray,
     });
   }
 
-  handleTogglePage = () => {
-    console.log('Toggle page!');
+  handleChangepageNum = (arrowBtn) => {
+
+    this.setState(prevState => {
+      let pageNum = prevState.pageNum;
+      let sliceDataArray = prevState.sliceDataArray;
+      let dataArray = prevState.dataArray;
+      let pageCount = prevState.pageCount;
+  
+      if (arrowBtn === "nextPage") {
+        pageNum = pageNum + 1;
+      } else if (arrowBtn === "prevPage") {
+        pageNum = pageNum - 1;
+      }
+      sliceDataArray = dataArray.slice((pageNum - 1) * pageCount, pageNum * pageCount);
+          
+      return { pageNum, sliceDataArray };
+    });
   }
 
   render() {
-    const {  error, isLoaded, showForm, userDataArray, currentPage, totalItems, limit, pages, start, end } = this.state;
+    const {  error, isLoaded, showForm, pageNum, pageCount, pages, sliceDataArray } = this.state;
 
     if (error) {
       return <div>Ошибка: {error.message}</div>
@@ -144,13 +154,14 @@ export class App extends Component {
               {showForm && (
                 <FormAdd className="form-add" onSubmit={this.handleAddData}/>
               )}
-              <Table userDataArray={userDataArray.slice(0, limit)} onClick={this.handleSorting}/>
+              <Table dataArray={sliceDataArray} onClick={this.handleSorting}/>
               {pages > 1 && (
                 <Pagination 
-                  currentPage={currentPage}
-                  totalItems={totalItems}
-                  limit={limit}
-                  onClick={this.handleTogglePage} />
+                  pageNum={pageNum}
+                  pages={pages}
+                  pageCount={pageCount}
+                  adjacents={1}
+                  onClickArrow={this.handleChangepageNum} />
               )}
               </div>
           </Fragment>

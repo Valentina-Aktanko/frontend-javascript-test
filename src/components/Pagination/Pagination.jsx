@@ -7,46 +7,44 @@ import classNames from 'classnames';
 // import { PaginationItems } from 'components/PaginationItems';
 
 export class Pagination extends Component {
-  state = {
-    // currentPage: 1,
-  }
 
   static propTypes =  {
-    currentPage: PropTypes.number.isRequired,
-    totalItems: PropTypes.number.isRequired,
-    limit: PropTypes.number,
+    pageNum: PropTypes.number.isRequired,
+    pages: PropTypes.number.isRequired,
+    pageCount: PropTypes.number,
     adjacents: PropTypes.number,
-    onClick: PropTypes.func.isRequired,
+    onClickArrow: PropTypes.func,
   }
 
   static defaultProps = {
-    limit: 20,
+    pageCount: 20,
     adjacents: 1,
   };
 
   handleClick = (event) => {
   }
 
+  handleClickArrow = (event) => {
+
+  }
+
   render() {
-    const { currentPage, totalItems, limit, adjacents, onClick } = this.props;
-    let targetpage = "/";
-    let prev = currentPage - 1;			
-    let next = currentPage + 1;
-    let lastPage = Math.ceil(totalItems / limit);			
-    // let start	
+    const { pageNum, pages, pageCount, adjacents, onClickArrow } = this.props;
     
     return (
       <ul className="pagination">
         <PrevArrow 
-          currentPage={currentPage}/>
+          pageNum={pageNum}
+          onClick={onClickArrow}/>
         <PageItems 
-          currentPage={currentPage}
-          lastPage={lastPage}
+          pageNum={pageNum}
+          pages={pages}
           adjacents={adjacents}
         />
         <NextArrow 
-          currentPage={currentPage}
-          lastPage={lastPage}/>
+          pageNum={pageNum}
+          pages={pages}
+          onClick={onClickArrow}/>
       </ul>
     );
   }
@@ -55,22 +53,70 @@ export class Pagination extends Component {
 export class PrevArrow extends Component {
   
   static propTypes =  {
-    currentPage: PropTypes.number.isRequired,
+    pageNum: PropTypes.number.isRequired,
+    onClick: PropTypes.func,
+  }
+
+  handleClick = (event) => {
+    const { onClick } = this.props;
+
+    event.preventDefault();
+
+    if (typeof onClick === 'function') {
+      onClick("prevPage");
+    }
   }
 
   render() {
-    const { currentPage } = this.props;
+    const { pageNum, onClick } = this.props;
 
-    if (currentPage === 1) {
+    if (pageNum === 1) {
       return (
         <li className="pagination__item pagination__item--disabled">
           <a>Назад</a>
         </li>
       );
-    } else if (currentPage > 1) {
+    } else if (pageNum > 1) {
       return (
         <li className="pagination__item">
-          <a href="#">Назад</a>
+          <a href="#" onClick={this.handleClick}>Назад</a>
+        </li>
+      );
+    }
+  }
+}
+
+export class NextArrow extends Component {
+  
+  static propTypes =  {
+    pageNum: PropTypes.number.isRequired,
+    pages: PropTypes.number.isRequired,
+    onClick: PropTypes.func,
+  }
+
+  handleClick = (event) => {
+    const { onClick } = this.props;
+
+    event.preventDefault();
+
+    if (typeof onClick === 'function') {
+      onClick("nextPage");
+    }
+  }
+
+  render() {
+    const { pageNum, pages } = this.props;
+
+    if (pageNum === pages) {
+      return (
+        <li className="pagination__item pagination__item--disabled">
+          <a>Вперед</a>
+        </li>
+      );
+    } else {
+      return (
+        <li className="pagination__item">
+          <a href="#" onClick={this.handleClick}>Вперед</a>
         </li>
       );
     }
@@ -80,8 +126,8 @@ export class PrevArrow extends Component {
 export class PageItems extends Component {
   
   static propTypes =  {
-    currentPage: PropTypes.number.isRequired,
-    lastPage: PropTypes.number.isRequired,
+    pageNum: PropTypes.number.isRequired,
+    pages: PropTypes.number.isRequired,
     adjacents: PropTypes.number.isRequired,
   }
 
@@ -107,26 +153,28 @@ export class PageItems extends Component {
   }
 
   render() {
-    const { currentPage, lastPage, adjacents } = this.props;
-    const lastPageMinusOne = lastPage - 1;
+    const { pageNum, pages, adjacents } = this.props;
+    const lastPageMinusOne = pages - 1;
     let pageItems = [];
 
-    if (lastPage < 7 + (adjacents * 2))	{ //недостаточно страниц, чтобы ломать голову
-			for (let counter = 1; counter <= lastPage; counter++) {
-				if (counter == currentPage) {
+    // недостаточно страниц, чтобы ломать голову
+    if (pages < 7 + (adjacents * 2))	{ 
+			for (let counter = 1; counter <= pages; counter++) {
+				if (counter == pageNum) {
           this.addPage(pageItems, 'pagination__item--current', counter);
         }
         else {
           this.addPage(pageItems, '', counter);
         }
       }
-      
-    } else if(lastPage >= 7 + (adjacents * 2)) {	//страниц достаточно, чтобы скрыть некоторые
+    
+    // страниц достаточно, чтобы скрыть некоторые  
+    } else if(pages >= 7 + (adjacents * 2)) {	
       
       // находимся в начале, скрыть только более поздние страницы
-      if(currentPage < 1 + (adjacents * 3)) {
+      if(pageNum < 1 + (adjacents * 3)) {
         for (let counter = 1; counter < 4 + (adjacents * 2); counter++) {
-          if (counter == currentPage) {
+          if (counter == pageNum) {
             this.addPage(pageItems, 'pagination__item--current', counter);
           } else {
             this.addPage(pageItems, '', counter);
@@ -134,17 +182,18 @@ export class PageItems extends Component {
         }
         this.addPage(pageItems, 'pagination__elipses', '...');
         this.addPage(pageItems, '', lastPageMinusOne);
-        this.addPage(pageItems, '', lastPage);
+        this.addPage(pageItems, '', pages);
       }
 
       // находимся в середине, скрыть немного в начале и немного в конце
-			else if(lastPage - (adjacents * 2) > currentPage && currentPage > (adjacents * 2)) {
+      else if (pages - (adjacents * 2) > pageNum && 
+        pageNum > (adjacents * 2)) {
         this.addPage(pageItems, '', 1);
         this.addPage(pageItems, '', 2);
         this.addPage(pageItems, 'pagination__elipses', '...');
-				for (let counter = currentPage - adjacents; counter <= currentPage + adjacents; counter++)
+				for (let counter = pageNum - adjacents; counter <= pageNum + adjacents; counter++)
 				{
-					if (counter == currentPage) {
+					if (counter == pageNum) {
             this.addPage(pageItems, 'pagination__item--current', counter);
           } else {
             this.addPage(pageItems, '', counter);
@@ -152,7 +201,7 @@ export class PageItems extends Component {
         }
         this.addPage(pageItems, 'pagination__elipses', '...');
         this.addPage(pageItems, '', lastPageMinusOne);
-        this.addPage(pageItems, '', lastPage);
+        this.addPage(pageItems, '', pages);
       }
       
       // находимся в конце, скрыть только более ранние страницы
@@ -160,9 +209,9 @@ export class PageItems extends Component {
 				this.addPage(pageItems, '', 1);
         this.addPage(pageItems, '', 2);
 				this.addPage(pageItems, 'pagination__elipses', '...');
-				for (let counter = lastPage - (1 + (adjacents * 3)); counter <= lastPage; counter++)
+				for (let counter = pages - (1 + (adjacents * 3)); counter <= pages; counter++)
 				{
-					if (counter == currentPage) {
+					if (counter == pageNum) {
             this.addPage(pageItems, 'pagination__item--current', counter);
           } else {
             this.addPage(pageItems, '', counter);
@@ -173,30 +222,5 @@ export class PageItems extends Component {
 
     return pageItems;
 
-  }
-}
-
-export class NextArrow extends Component {
-  
-  static propTypes =  {
-    currentPage: PropTypes.number.isRequired,
-  }
-
-  render() {
-    const { currentPage, lastPage } = this.props;
-
-    if (currentPage === lastPage) {
-      return (
-        <li className="pagination__item pagination__item--disabled">
-          <a>Вперед</a>
-        </li>
-      );
-    } else {
-      return (
-        <li className="pagination__item">
-          <a href="#">Вперед</a>
-        </li>
-      );
-    }
   }
 }
