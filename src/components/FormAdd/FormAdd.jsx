@@ -56,14 +56,13 @@ export class FormAdd extends Component {
 
   validateField = (fieldName, value) => {
 
-    // Валидация не реализована, выполняется проверка на заполненность
-    // switch сделан для возможности валидации разных полей
+    // TODO: Реализовать нормальную валидацию
     switch(fieldName) {
       case 'id':
         this.setState(prevState => ({
           validation: {
             ...prevState.validation,
-            idValid: Boolean(value),
+            idValid: value !== '',
           }
         }), () => {this.validateForm()});
         break;
@@ -71,7 +70,7 @@ export class FormAdd extends Component {
         this.setState(prevState => ({
           validation: {
             ...prevState.validation,
-            firstNameValid: Boolean(value),
+            firstNameValid: value !== '',
           }
         }), () => {this.validateForm()});
         break;
@@ -79,7 +78,7 @@ export class FormAdd extends Component {
         this.setState(prevState => ({
           validation: {
             ...prevState.validation,
-            lastNameValid: Boolean(value),
+            lastNameValid: value !== '',
           }
         }), () => {this.validateForm()});
         break;
@@ -87,7 +86,7 @@ export class FormAdd extends Component {
         this.setState(prevState => ({
           validation: {
             ...prevState.validation,
-            emailValid: Boolean(value),
+            emailValid: value !== '',
           }
         }));
         break;
@@ -95,7 +94,7 @@ export class FormAdd extends Component {
         this.setState(prevState => ({
           validation: {
             ...prevState.validation,
-            phoneValid: Boolean(value),
+            phoneValid: value !== '',
           }
         }), () => {this.validateForm()});
         break;

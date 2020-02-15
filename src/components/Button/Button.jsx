@@ -10,7 +10,10 @@ export class Button extends Component {
     className: PropTypes.string,
     id: PropTypes.string,
     action: PropTypes.string,
-    title: PropTypes.string.isRequired,
+    title: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.object
+    ]),
     disabled: PropTypes.bool,
     onClick: PropTypes.func,
   }

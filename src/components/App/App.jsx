@@ -20,7 +20,6 @@ export class App extends Component {
     isLoaded: false,
     
     showAddForm: false,
-    showSearchForm: false,
     dataArray: [],
     sliceDataArray: [],
 
@@ -58,12 +57,6 @@ export class App extends Component {
     });
   }
 
-  handleShowSearchForm = () => {
-    this.setState({
-      showSearchForm : !this.state.showSearchForm,
-    });
-  }
-
   handleSelectAddress = (selectedAddress) => {
     this.setState(prevState => {
       let address = prevState.address;
@@ -85,16 +78,18 @@ export class App extends Component {
 
   handleSearchData = (searchText) => {
     
-    this.setState(prevState => {
-      let sliceDataArray = prevState.sliceDataArray;
-      let someUsers = sliceDataArray.filter(item => item.id < searchText
-        // item.id.includes(searchText);
-      );
-      console.log(this.state);
+    // this.setState(prevState => {
+    //   let sliceDataArray = prevState.sliceDataArray;
+    //   let someUsers = sliceDataArray.filter(item => item.id < searchText
+    //     // item.id.includes(searchText);
+    //   );
+    //   console.log(this.state);
       
-      sliceDataArray  = someUsers;
-      return { sliceDataArray };
-    });
+    //   sliceDataArray  = someUsers;
+    //   return { sliceDataArray };
+    // });
+    console.log(`Ищем текст: ${searchText}`);
+    
   }
 
   handleSorting = (fieldName, direction) => {
@@ -162,7 +157,7 @@ export class App extends Component {
   }
 
   render() {
-    const {  error, isLoaded, showAddForm, showSearchForm, pageNum, pageCount, pages, sliceDataArray } = this.state;
+    const {  error, isLoaded, showAddForm, pageNum, pageCount, pages, sliceDataArray } = this.state;
 
     if (error) {
       return <div>Ошибка: {error.message}</div>
@@ -173,7 +168,6 @@ export class App extends Component {
           <div>
             <div className="container">
               <Button 
-                className="button"
                 type="button"
                 title="Добавить"
                 onClick={this.handleShowAddForm}
@@ -181,15 +175,7 @@ export class App extends Component {
               {showAddForm && (
                 <FormAdd className="form-add" onSubmit={this.handleAddData} />
               )}
-              <Button 
-                className="button"
-                type="button"
-                title="Найти"
-                onClick={this.handleShowSearchForm}
-              />
-              {showSearchForm && (
-                <FormSearch className="form-search" onSubmit={this.handleSearchData} />
-              )}
+              <FormSearch className="form-search" onSubmit={this.handleSearchData} />
               <Table dataArray={sliceDataArray} onClick={this.handleSorting} />
               {pages > 1 && (
                 <Pagination 

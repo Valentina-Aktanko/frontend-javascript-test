@@ -3,6 +3,7 @@ import './FormSearch.scss';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import SearchIcon from '@material-ui/icons/Search';
 
 import { Label } from 'components/Label';
 import { Input } from 'components/Input';
@@ -20,14 +21,10 @@ export class FormSearch extends Component {
   }
 
   handleChange = (event) => {
-    const { onSubmit } = this.props;
     const searchText = event.target.value;
-
-    if (typeof onSubmit === 'function') {
-      this.setState({
-        searchText: searchText,
-      }, () => onSubmit(searchText));
-    }
+    this.setState({
+      searchText: searchText,
+    });
   }
 
   handleSubmit = (event) => {
@@ -35,7 +32,6 @@ export class FormSearch extends Component {
     const { searchText } = this.state;
 
     event.preventDefault();
-
     if (typeof onSubmit === 'function') {
       onSubmit(searchText);
       
@@ -45,6 +41,14 @@ export class FormSearch extends Component {
     }
   }
 
+  handleFocus = () => {
+      // this.setState({
+      //   searchText: '',
+      // });
+    console.log("Focus!");
+    
+  }
+
   render() {
     const { searchText } = this.state;
     const { className } = this.props;
@@ -52,24 +56,19 @@ export class FormSearch extends Component {
     
     return (
       <div>
-        <form className={classes} method="post">
-            <div className="form-search__group">
-              <Label htmlFor="input-search"
-                title="Что ищем?" />
-              <Input type="text"
-                id="input-search"
-                name="search"
-                value={searchText}
-                placeholder="Sue"
-                onChange={this.handleChange} 
-              />
-            </div>
-
-          {/* <Button action="#"
+        <form className={classes} method="post" onSubmit={this.handleSubmit}>
+          <Input type="text"
+            id="input-search"
+            name="search"
+            value={searchText}
+            placeholder="Sue"
+            onChange={this.handleChange} 
+          />
+          <Button action="#"
+            className="form-search__btn"
             type="submit"
-            title="Найти"
-            onClick={this.handleSubmit}
-          /> */}
+            title={<SearchIcon fontSize='inherit' color="inherit" />}
+            onClick={this.handleSubmit}            />
         </form>
       </div>
     );
