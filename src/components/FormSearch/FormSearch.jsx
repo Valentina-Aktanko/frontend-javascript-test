@@ -41,14 +41,6 @@ export class FormSearch extends Component {
     }
   }
 
-  handleFocus = () => {
-      // this.setState({
-      //   searchText: '',
-      // });
-    console.log("Focus!");
-    
-  }
-
   render() {
     const { searchText } = this.state;
     const { className } = this.props;
