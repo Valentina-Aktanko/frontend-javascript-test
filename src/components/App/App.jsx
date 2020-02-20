@@ -88,7 +88,14 @@ export class App extends Component {
     //   sliceDataArray  = someUsers;
     //   return { sliceDataArray };
     // });
-    console.log(`Ищем текст: ${searchText}`);
+    
+    if (searchText === '') {
+      console.log('Отменяем поиск');
+    } else {
+      const { sliceDataArray } = this.state;
+      console.log(`Ищем текст: ${searchText}`);
+      console.log(sliceDataArray);
+    }
     
   }
 
