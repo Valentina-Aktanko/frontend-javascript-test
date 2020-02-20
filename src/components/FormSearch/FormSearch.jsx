@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import SearchIcon from '@material-ui/icons/Search';
 
-import { Label } from 'components/Label';
 import { Input } from 'components/Input';
 import { Button } from 'components/Button';
 
