@@ -1,21 +1,28 @@
 .form-search {
+  display: flex;
+  justify-content: space-between;
   position: relative;
-  width: 200px;
+  width: 300px;
   margin: 0 auto;
   margin-bottom: 15px;
   box-sizing: border-box;
 
+  & svg {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 5px;
+    left: 5px;
+    color: #aaa;
+  }
+
+  &__input {
+    padding-left: 30px;
+    width: 200px;
+  }
+
   &__btn {
-    position: absolute; 
-    top: 0;
-    right: 0px;
-    width: 30px;
-    height: 30px;
-    font-size: 20px;
-    border: 1px solid rgba(0,0,0,.4);
-    border-radius: 0 5px 5px 0;
-    cursor: pointer;
-    box-sizing: border-box;
+    width: 90px;
   }
 
 }

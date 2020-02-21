@@ -54,7 +54,9 @@ export class FormSearch extends Component {
     return (
       <div>
         <form className={classes} method="post" onSubmit={this.handleSubmit}>
-          <Input type="text"
+          <SearchIcon fontSize="inherit" color="inherit" />
+          <Input type="search"
+            className="form-search__input"
             id="input-search"
             name="search"
             value={searchText}
@@ -64,7 +66,7 @@ export class FormSearch extends Component {
           <Button action="#"
             className="form-search__btn"
             type="submit"
-            title={<SearchIcon fontSize='inherit' color="inherit" />}
+            title="Найти"
             onClick={this.handleSubmit}            />
         </form>
       </div>
