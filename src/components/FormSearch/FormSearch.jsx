@@ -21,9 +21,16 @@ export class FormSearch extends Component {
 
   handleChange = (event) => {
     const searchText = event.target.value;
+    const { onSubmit } = this.props;
+
     this.setState({
       searchText: searchText,
     });
+
+    // Если поле поиска пустое, отменим фильтрацию
+    if (searchText === '' && typeof onSubmit === 'function') {
+      onSubmit(searchText);
+    }
   }
 
   handleSubmit = (event) => {
@@ -34,9 +41,8 @@ export class FormSearch extends Component {
     if (typeof onSubmit === 'function') {
       onSubmit(searchText);
       
-      this.setState({
-        searchText: '',
-      });
+      // Выделим текст в поле поиска
+      document.getElementById('input-search').select();
     }
   }
 
