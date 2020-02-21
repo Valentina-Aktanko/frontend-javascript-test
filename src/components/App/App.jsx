@@ -87,12 +87,13 @@ export class App extends Component {
       if (searchText === '') {
         sliceDataArray = dataArray.slice((pageNum - 1) * pageCount, pageNum * pageCount);
       } else {
+        searchText = searchText.toLowerCase();
         sliceDataArray = sliceDataArray.filter(item =>
           String(item.id).includes(searchText) ||
-          item.firstName.includes(searchText) ||
-          item.lastName.includes(searchText) ||
-          item.email.includes(searchText) ||
-          item.phone.includes(searchText));
+          item.firstName.toLowerCase().includes(searchText) ||
+          item.lastName.toLowerCase().includes(searchText) ||
+          item.email.toLowerCase().includes(searchText) ||
+          item.phone.toLowerCase().includes(searchText));
       }
       return { sliceDataArray };
     });
