@@ -4,7 +4,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-// import { PaginationItems } from 'components/PaginationItems';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import { Link } from 'react-router-dom';
+
 
 export class Pagination extends Component {
 
@@ -25,7 +29,7 @@ export class Pagination extends Component {
     const { pageNum, pages, adjacents, onClick } = this.props;
     
     return (
-      <ul className="pagination">
+      <List className="pagination">
         <PrevArrow 
           pageNum={pageNum}
           onClick={onClick}
@@ -41,7 +45,7 @@ export class Pagination extends Component {
           pages={pages}
           onClick={onClick}
         />
-      </ul>
+      </List>
     );
   }
 }
@@ -64,19 +68,23 @@ export class PrevArrow extends Component {
   }
 
   render() {
-    const { pageNum, onClick } = this.props;
-
+    const { pageNum } = this.props;
+    
     if (pageNum === 1) {
       return (
-        <li className="pagination__item pagination__item--disabled">
-          <a>Назад</a>
-        </li>
+        <ListItem className="pagination__item pagination__item--disabled" disableGutters={true}>
+          <a>
+            <ListItemText primary="Назад"></ListItemText>
+          </a>
+        </ListItem>
       );
     } else if (pageNum > 1) {
       return (
-        <li className="pagination__item">
-          <a href="#" onClick={this.handleClick}>Назад</a>
-        </li>
+        <ListItem className="pagination__item" disableGutters={true}>
+          <Link to={`/page/${pageNum-1}`} onClick={this.handleClick} >
+            <ListItemText primary="Назад"></ListItemText>
+          </Link>
+        </ListItem>
       );
     }
   }
@@ -105,15 +113,19 @@ export class NextArrow extends Component {
 
     if (pageNum === pages) {
       return (
-        <li className="pagination__item pagination__item--disabled">
-          <a>Вперед</a>
-        </li>
+        <ListItem className="pagination__item pagination__item--disabled" disableGutters={true}>
+          <a>
+            <ListItemText primary="Вперед"></ListItemText>
+          </a>
+        </ListItem>
       );
     } else {
       return (
-        <li className="pagination__item">
-          <a href="#" onClick={this.handleClick}>Вперед</a>
-        </li>
+        <ListItem className="pagination__item" disableGutters={true}>
+          <Link to={`/page/${pageNum+1}`} onClick={this.handleClick} >
+            <ListItemText primary="Вперед"></ListItemText>
+          </Link>
+        </ListItem>
       );
     }
   }
@@ -142,17 +154,19 @@ export class PageItems extends Component {
 
     if (className === 'pagination__item--current' || className === 'pagination__elipses') {
       pageItems.push( 
-        <li key={pageItems.length} // наверное, странный ключ. Но лучше пока ничего не придумалось
-            className={classes}>
-          <a>{counter}</a>
-        </li>
+        <ListItem className={classes} key={pageItems.length} disableGutters={true}>
+          <a>
+            <ListItemText primary={counter}></ListItemText>
+          </a>
+        </ListItem>
       );
     } else if (className === '') {
       pageItems.push(
-        <li key={pageItems.length}
-            className={classes}>
-          <a href="#" onClick={this.handleClick}>{counter}</a>
-        </li>
+        <ListItem className={classes} key={pageItems.length} disableGutters={true}>
+          <Link to={`/page/${counter}`} onClick={this.handleClick} >
+            <ListItemText primary={counter}></ListItemText>
+          </Link>
+        </ListItem>
       );
     }
     return pageItems;

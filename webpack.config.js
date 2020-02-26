@@ -14,6 +14,7 @@ module.exports = {
     alias: {
       components: path.resolve(__dirname, 'src', 'components'),
       assets: path.resolve(__dirname, 'src', 'assets'),
+      pages: path.resolve(__dirname, 'src', 'pages'),
     },
   },
   module: {
@@ -43,4 +44,7 @@ module.exports = {
       folename: 'main.css',
     }),
   ],
+  devServer: {
+    historyApiFallback: true,
+  }
 }

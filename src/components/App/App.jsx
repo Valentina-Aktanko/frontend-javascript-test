@@ -2,44 +2,30 @@ import './App.scss';
 
 import React, { Component } from 'react';
 
-import { Loader } from 'components/Loader';
-import { FormAdd } from 'components/FormAdd';
-import { FormSearch } from 'components/FormSearch';
-import { Table } from 'components/Table';
-import { Button } from 'components/Button';
-import { Pagination } from 'components/Pagination';
+import { Spinner } from 'components/Spinner';
+import { Layout } from '../Layout/Layout';
 
 export class App extends Component {
   state = {
     smallDataSet: "http://www.filltext.com/?rows=32&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}",
     bigDataSet: "http://www.filltext.com/?rows=1000&id={number|1000}&firstName={firstName}&delay=3&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}",
-
-    address: '',
-
     error: null,
     isLoaded: false,
-
-    showAddForm: false,
+    fullDataArray: [],
     dataArray: [],
-    sliceDataArray: [],
-
-    pageNum: 1,
-    pageCount: 50,
-    pages: 1,
   }
 
   componentDidMount() {
-    const { smallDataSet, pageNum, pageCount } = this.state;
+    const { bigDataSet } = this.state;
 
-    fetch(smallDataSet)
+    fetch(bigDataSet)
       .then(res => res.json())
       .then(
         (result) => {
           this.setState({
             isLoaded: true,
+            fullDataArray: result,
             dataArray: result,
-            pages: Math.ceil(result.length / pageCount),
-            sliceDataArray: result.slice((pageNum - 1) * pageCount, pageNum * pageCount),
           });
         },
         (error) => {
@@ -51,66 +37,51 @@ export class App extends Component {
       )
   }
 
-  handleShowAddForm = () => {
-    this.setState({
-      showAddForm: !this.state.showAddForm,
-    });
-  }
-
-  handleSelectAddress = (selectedAddress) => {
-    this.setState(prevState => {
-      let address = prevState.address;
-      address = selectedAddress;
-      return { address };
-    });
-  }
-
   handleAddData = (newData) => {
     this.setState(prevState => {
       let dataArray = prevState.dataArray;
-      let sliceDataArray = prevState.sliceDataArray;
+      let fullDataArray = prevState.fullDataArray;
 
+      fullDataArray.unshift(newData);
       dataArray.unshift(newData);
-      sliceDataArray.unshift(newData);
-      return { dataArray, sliceDataArray };
+      return { fullDataArray, dataArray };
     });
   }
 
   handleSearchData = (searchText) => {
-
-    this.setState(prevState => {
-      let pageNum = prevState.pageNum;
-      let sliceDataArray = prevState.sliceDataArray;
-      let dataArray = prevState.dataArray;
-      let pageCount = prevState.pageCount;
-
-      if (searchText === '') {
-        sliceDataArray = dataArray.slice((pageNum - 1) * pageCount, pageNum * pageCount);
-      } else {
-        searchText = searchText.toLowerCase();
-        sliceDataArray = sliceDataArray.filter(item =>
-          String(item.id).includes(searchText) ||
-          item.firstName.toLowerCase().includes(searchText) ||
-          item.lastName.toLowerCase().includes(searchText) ||
-          item.email.toLowerCase().includes(searchText) ||
-          item.phone.toLowerCase().includes(searchText));
-      }
-      return { sliceDataArray };
+    const { dataArray } = this.state;
+    searchText = searchText.toLowerCase();
+    let filterArray = dataArray.filter(item =>
+      String(item.id).includes(searchText) ||
+      item.firstName.toLowerCase().includes(searchText) ||
+      item.lastName.toLowerCase().includes(searchText) ||
+      item.email.toLowerCase().includes(searchText) ||
+      item.phone.toLowerCase().includes(searchText));
+    this.setState({
+      dataArray: filterArray,
     });
   }
 
-  handleSorting = (fieldName, direction) => {
-    let { sliceDataArray } = this.state;
+  handleClearSearch = () => {
+    // TODO: Immutable.map
+    const { fullDataArray } = this.state;
+    this.setState({
+      dataArray: fullDataArray,
+    });
+  }
 
-    if (fieldName === 'id' && direction === "asc") {
+  handleSortingData = (fieldName, sortDirection) => {
+    let sliceDataArray = Array.from(this.state.dataArray);
+
+    if (fieldName === 'id' && sortDirection === "asc") {
       sliceDataArray.sort(function (a, b) {
         return a[fieldName] - b[fieldName];
       });
-    } else if (fieldName === 'id' && direction === "desc") {
+    } else if (fieldName === 'id' && sortDirection === "desc") {
       sliceDataArray.sort(function (a, b) {
         return b[fieldName] - a[fieldName];
       });
-    } else if (fieldName !== 'id' && direction === "asc") {
+    } else if (fieldName !== 'id' && sortDirection === "asc") {
       sliceDataArray.sort(function (a, b) {
         let nameA = a[fieldName].toLowerCase();
         let nameB = b[fieldName].toLowerCase();
@@ -122,7 +93,7 @@ export class App extends Component {
           return 0;
         }
       });
-    } else if (fieldName !== 'id' && direction === "desc") {
+    } else if (fieldName !== 'id' && sortDirection === "desc") {
       sliceDataArray.sort(function (a, b) {
         let nameA = a[fieldName].toLowerCase();
         let nameB = b[fieldName].toLowerCase();
@@ -137,63 +108,26 @@ export class App extends Component {
     } else console.log("Ошибка сортировки");
 
     this.setState({
-      sliceDataArray: sliceDataArray,
-    });
-  }
-
-  handleChangePageNum = (btnContent) => {
-
-    this.setState(prevState => {
-      let pageNum = prevState.pageNum;
-      let sliceDataArray = prevState.sliceDataArray;
-      let dataArray = prevState.dataArray;
-      let pageCount = prevState.pageCount;
-
-      if (btnContent === "nextPage") {
-        pageNum = pageNum + 1;
-      } else if (btnContent === "prevPage") {
-        pageNum = pageNum - 1;
-      } else if (typeof btnContent === "number" && !isNaN(btnContent)) {
-        pageNum = btnContent;
-      } else pageNum = pageNum;
-
-      sliceDataArray = dataArray.slice((pageNum - 1) * pageCount, pageNum * pageCount);
-
-      return { pageNum, sliceDataArray };
+      dataArray: sliceDataArray,
     });
   }
 
   render() {
-    const { error, isLoaded, showAddForm, pageNum, pageCount, pages, sliceDataArray } = this.state;
+    const { error, isLoaded, dataArray } = this.state;
 
     if (error) {
       return <div>Ошибка: {error.message}</div>
     } else if (!isLoaded) {
-      return <div className="async-spinner"></div>
+      return <Spinner />
     } else {
       return (
-        <div>
-          <div className="container">
-            <Button
-              type="button"
-              title="Добавить"
-              onClick={this.handleShowAddForm}
-            />
-            {showAddForm && (
-              <FormAdd className="form-add" onSubmit={this.handleAddData} />
-            )}
-            <FormSearch className="form-search" onSubmit={this.handleSearchData} />
-            <Table dataArray={sliceDataArray} onClick={this.handleSorting} />
-            {pages > 1 && (
-              <Pagination
-                pageNum={pageNum}
-                pages={pages}
-                pageCount={pageCount}
-                adjacents={1}
-                onClick={this.handleChangePageNum} />
-            )}
-          </div>
-        </div>
+        <Layout 
+          dataArray={dataArray}
+          handleAddData={this.handleAddData}
+          handleSearchData={this.handleSearchData}
+          handleClearSearch={this.handleClearSearch}
+          handleSortingData={this.handleSortingData}
+        />
       );
     }
   }

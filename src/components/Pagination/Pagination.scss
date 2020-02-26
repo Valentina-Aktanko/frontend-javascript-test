@@ -4,8 +4,6 @@
 	margin: 0;
   list-style: none;
 
-  // .pagination 
-
   &__item:first-child {
     padding-left: 0;
     margin-left: 0;
@@ -35,7 +33,6 @@
   &__item a[href]:hover,
   &__item a[href]:active {
     border: 1px solid #000099;
-	  color: #000000;
+    color: #000000;
   }
-
 }

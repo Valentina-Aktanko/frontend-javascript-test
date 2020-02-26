@@ -37,7 +37,7 @@ export class FormAdd extends Component {
 
   static propTypes =  {
     className: PropTypes.string,
-    onSubmit: PropTypes.func,
+    onSubmit: PropTypes.func.isRequired,
   }
 
   handleChange = (event) => {
@@ -150,7 +150,8 @@ export class FormAdd extends Component {
           formValid: false,
         },
       });
-    }
+    } else console.log('Ошибка при добавлении данных!');
+    
   }
 
   render() {

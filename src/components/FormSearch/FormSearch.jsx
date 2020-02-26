@@ -14,23 +14,23 @@ export class FormSearch extends Component {
     searchText: '',
   }
 
-  static propTypes =  {
+  static propTypes = {
     className: PropTypes.string,
-    onSubmit: PropTypes.func,
+    onSubmit: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
   }
 
   handleChange = (event) => {
     const searchText = event.target.value;
-    const { onSubmit } = this.props;
+    const { onChange } = this.props;
 
+    // Если поле поиска пустое, отменим фильтрацию
+    if (typeof onChange === 'function' && searchText === '') {
+      onChange();
+    }
     this.setState({
       searchText: searchText,
     });
-
-    // Если поле поиска пустое, отменим фильтрацию
-    if (searchText === '' && typeof onSubmit === 'function') {
-      onSubmit(searchText);
-    }
   }
 
   handleSubmit = (event) => {
@@ -38,9 +38,9 @@ export class FormSearch extends Component {
     const { searchText } = this.state;
 
     event.preventDefault();
-    if (typeof onSubmit === 'function') {
+    if (typeof onSubmit === 'function' && searchText !== "") {
       onSubmit(searchText);
-      
+
       // Выделим текст в поле поиска
       document.getElementById('input-search').select();
     }
@@ -50,7 +50,7 @@ export class FormSearch extends Component {
     const { searchText } = this.state;
     const { className } = this.props;
     const classes = classNames('form', [className]);
-    
+
     return (
       <div>
         <form className={classes} method="post" onSubmit={this.handleSubmit}>
@@ -61,13 +61,13 @@ export class FormSearch extends Component {
             name="search"
             value={searchText}
             placeholder="Sue"
-            onChange={this.handleChange} 
+            onChange={this.handleChange}
           />
           <Button action="#"
             className="form-search__btn"
             type="submit"
             title="Найти"
-            onClick={this.handleSubmit}            />
+            onClick={this.handleSubmit} />
         </form>
       </div>
     );
