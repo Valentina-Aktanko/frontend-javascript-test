@@ -9,9 +9,9 @@ export const routes = [
     component: App,
   },
   {
-    path: '/page:pageNum',
+    path: '/page/:pageNum',
     exact: true,
-    component: App,
+    component: Layout,
   },
   {
     path: '/settings',
