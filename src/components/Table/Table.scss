@@ -1,34 +1,61 @@
 .data-table {
-  width: 70%;
+  width: 100%;
   border-collapse: collapse;
+  
+  & td,
+  & th {
+    padding: 0 15px;
+    border: 1px solid black;
+    border-spacing: 0;
+  } 
+  
+  & td:first-child {
+    text-align: center;
+  }
+
+  & th {
+    text-align: left;
+    padding-right: 40px;
+    position: relative;
+    cursor: pointer;
+
+    &:after {
+      position: absolute;
+      top: 0;
+      right: 15px;
+      content: "";
+      font-weight: normal;
+      font-style: italic;
+    }
+
+    &[data-name='id']{
+      width: 10%;
+    }
+
+    &[data-name='firstName']{
+      width: 15%;
+    }
+    
+    &[data-name='lastName']{
+      width: 20%;
+    }
+    
+    &[data-name='email']{
+      width: 30%;
+    }
+    
+    &[data-name='phone']{
+      width: 25%;
+    }
+    
+    &[data-sort="desc"]:after {
+      content: "desc";
+    }
+
+    &[data-sort="asc"]:after {
+      content: 'asc';
+    }
+  }
 }
 
-.data-table th,
-.data-table td {
-  padding: 5px;
-  padding-right: 40px;
-  border: 1px solid black;
-  border-spacing: 0;
-} 
 
-.data-table th {
-  text-align: left;
-  position: relative;
-  cursor: pointer;
-}
-.data-table th:after {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  content: "";
-  font-weight: normal;
-  font-style: italic;
-}
-
-.data-table th[data-sort="desc"]:after {
-  content: "desc";
-}
-
-.data-table th[data-sort="asc"]:after {
-  content: 'asc';
-}
