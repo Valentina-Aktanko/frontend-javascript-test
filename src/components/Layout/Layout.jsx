@@ -34,6 +34,17 @@ export class Layout extends Component {
     });
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    const { pageCount } = this.state;
+    const { dataArray } = this.props;
+
+    if (dataArray !== prevProps.dataArray) {
+      this.setState({
+        pages: Math.ceil(dataArray.length / pageCount),
+      });
+    }
+  }
+
   handleShowFormAdd = () => {
     this.setState({
       showFormAdd: !this.state.showFormAdd,

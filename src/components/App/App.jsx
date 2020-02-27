@@ -60,6 +60,7 @@ export class App extends Component {
     this.setState({
       dataArray: filterArray,
     });
+    
   }
 
   handleClearSearch = () => {
