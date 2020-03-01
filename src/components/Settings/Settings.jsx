@@ -10,24 +10,27 @@ export class Settings extends Component {
   state = {
     smallDataSet: true,
     largeDataSet: false,
+    // smallDataSet: "http://www.filltext.com/?rows=32&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}",
+    // bigDataSet: "http://www.filltext.com/?rows=1000&id={number|1000}&firstName={firstName}&delay=3&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}",
+    
   }
 
   handleChange = (event) => {
     const value = event.target.value;
 
-    // this.setState({
-    //   smallDataSet: value === 'small',
-    //   largeDataSet: value === 'large',
-    // });
-
-    this.setState(prevState => {
-      let smallDataSet = prevState.smallDataSet;
-      let largeDataSet = prevState.largeDataSet;
-
-      smallDataSet = value === 'small';
-      largeDataSet = value === 'large';
-      return { smallDataSet, largeDataSet };
+    this.setState({
+      smallDataSet: value === 'small',
+      largeDataSet: value === 'large',
     });
+
+    // this.setState(prevState => {
+    //   let smallDataSet = prevState.smallDataSet;
+    //   let largeDataSet = prevState.largeDataSet;
+
+    //   smallDataSet = value === 'small';
+    //   largeDataSet = value === 'large';
+    //   return { smallDataSet, largeDataSet };
+    // });
   }
 
   handleSubmit = (event) => {
