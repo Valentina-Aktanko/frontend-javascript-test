@@ -13,10 +13,13 @@ export class App extends Component {
     isLoaded: false,
     fullDataArray: [],
     dataArray: [],
+    pageNum: 1,
+    pageCount: 50,
+    pages: 1,
   }
 
   componentDidMount() {
-    const { bigDataSet } = this.state;
+    const { bigDataSet, pageCount } = this.state;
 
     fetch(bigDataSet)
       .then(res => res.json())
@@ -26,6 +29,7 @@ export class App extends Component {
             isLoaded: true,
             fullDataArray: result,
             dataArray: result,
+            pages: Math.ceil(result.length / pageCount),
           });
         },
         (error) => {
@@ -36,6 +40,17 @@ export class App extends Component {
         }
       )
   }
+  // componentDidUpdate(prevProps, prevState) {
+  //   const { dataArray, pageCount } = this.state;
+
+  //   debugger
+  //   if (dataArray !== prevProps.dataArray) {
+  //     this.setState({
+  //       pages: Math.ceil(dataArray.length / pageCount),
+  //     });
+  //   }
+  // }
+
 
   handleAddData = (newData) => {
     this.setState(prevState => {
@@ -49,7 +64,8 @@ export class App extends Component {
   }
 
   handleSearchData = (searchText) => {
-    const { dataArray } = this.state;
+    const { dataArray, pageCount } = this.state;
+
     searchText = searchText.toLowerCase();
     let filterArray = dataArray.filter(item =>
       String(item.id).includes(searchText) ||
@@ -59,15 +75,17 @@ export class App extends Component {
       item.phone.toLowerCase().includes(searchText));
     this.setState({
       dataArray: filterArray,
+      pages: Math.ceil(filterArray.length / pageCount)
     });
     
   }
 
   handleClearSearch = () => {
     // TODO: Immutable.map
-    const { fullDataArray } = this.state;
+    const { fullDataArray, pageCount } = this.state;
     this.setState({
       dataArray: fullDataArray,
+      pages: Math.ceil(fullDataArray.length / pageCount)
     });
   }
 
@@ -113,8 +131,26 @@ export class App extends Component {
     });
   }
 
+  handleChangePageNum = (btn) => {
+    this.setState(prevState => {
+      let pageNum = prevState.pageNum;
+
+      if (btn === "nextPage") {
+        pageNum = pageNum + 1;
+      } else if (btn === "prevPage") {
+        pageNum = pageNum - 1;
+      } else if (typeof btn === "number" && !isNaN(btn)) {
+        pageNum = btn;
+      } else pageNum = pageNum;
+
+      return { pageNum };
+    });
+  }
+
   render() {
-    const { error, isLoaded, dataArray } = this.state;
+    const { error, isLoaded, dataArray, pageNum, pageCount, pages } = this.state;
+    const { match } = this.props;
+    console.log(this.props);
 
     if (error) {
       return <div>Ошибка: {error.message}</div>
@@ -124,10 +160,14 @@ export class App extends Component {
       return (
         <Layout 
           dataArray={dataArray}
+          pageCount={pageCount}
+          pageNum={pageNum}
+          pages={pages}
           handleAddData={this.handleAddData}
           handleSearchData={this.handleSearchData}
           handleClearSearch={this.handleClearSearch}
           handleSortingData={this.handleSortingData}
+          handleChangePageNum={this.handleChangePageNum}
         />
       );
     }

@@ -12,12 +12,12 @@ import { Pagination } from 'components/Pagination';
 export class Layout extends Component {
   state = {
     showFormAdd: false,
-    pageNum: 1,
-    pageCount: 50,
-    pages: 1,
   }
 
   static propTypes = {
+    pageNum: PropTypes.number.isRequired,
+    pageCount: PropTypes.number,
+    pages: PropTypes.number.isRequired,
     dataArray: PropTypes.array.isRequired,
     handleAddData: PropTypes.func.isRequired,
     handleSearchData: PropTypes.func.isRequired,
@@ -25,25 +25,9 @@ export class Layout extends Component {
     handleSortingData: PropTypes.func.isRequired,
   }
 
-  componentDidMount() {
-    const { pageCount } = this.state;
-    const { dataArray } = this.props;
-
-    this.setState({
-      pages: Math.ceil(dataArray.length / pageCount),
-    });
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const { pageCount } = this.state;
-    const { dataArray } = this.props;
-
-    if (dataArray !== prevProps.dataArray) {
-      this.setState({
-        pages: Math.ceil(dataArray.length / pageCount),
-      });
-    }
-  }
+  static defaultProps = {
+    pageCount: 50,
+  };
 
   handleShowFormAdd = () => {
     this.setState({
@@ -51,32 +35,19 @@ export class Layout extends Component {
     });
   }
 
-  handleChangePageNum = (btn) => {
-
-    this.setState(prevState => {
-      let pageNum = prevState.pageNum;
-
-      if (btn === "nextPage") {
-        pageNum = pageNum + 1;
-      } else if (btn === "prevPage") {
-        pageNum = pageNum - 1;
-      } else if (typeof btn === "number" && !isNaN(btn)) {
-        pageNum = btn;
-      } else pageNum = pageNum;
-
-      return { pageNum };
-    });
-  }
-
   render() {
-    const { showFormAdd, pageNum, pageCount, pages } = this.state;
+    const { showFormAdd } = this.state;
     const { 
+      pages,
+      pageNum,
+      pageCount,
       dataArray,
       handleAddData,
       handleSearchData,
       handleClearSearch,
-      handleSortingData } = this.props;
-
+      handleSortingData,
+      handleChangePageNum } = this.props;
+      
     return (
       <div className="container">
         <Button
@@ -102,7 +73,7 @@ export class Layout extends Component {
             pages={pages}
             pageCount={pageCount}
             adjacents={1}
-            onClick={this.handleChangePageNum} />
+            onClick={handleChangePageNum} />
         )}
       </div>
     );

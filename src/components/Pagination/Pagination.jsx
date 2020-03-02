@@ -21,7 +21,7 @@ export class Pagination extends Component {
   }
 
   static defaultProps = {
-    pageCount: 20,
+    pageCount: 50,
     adjacents: 1,
   };
 
@@ -81,7 +81,7 @@ export class PrevArrow extends Component {
     } else if (pageNum > 1) {
       return (
         <ListItem className="pagination__item" disableGutters={true}>
-          <Link to={`/page/${pageNum-1}`} onClick={this.handleClick} >
+          <Link to={`/pages/${pageNum-1}`} onClick={this.handleClick} >
             <ListItemText primary="Назад"></ListItemText>
           </Link>
         </ListItem>
@@ -122,7 +122,7 @@ export class NextArrow extends Component {
     } else {
       return (
         <ListItem className="pagination__item" disableGutters={true}>
-          <Link to={`/page/${pageNum+1}`} onClick={this.handleClick} >
+          <Link to={`/pages/${pageNum+1}`} onClick={this.handleClick} >
             <ListItemText primary="Вперед"></ListItemText>
           </Link>
         </ListItem>
@@ -163,7 +163,7 @@ export class PageItems extends Component {
     } else if (className === '') {
       pageItems.push(
         <ListItem className={classes} key={pageItems.length} disableGutters={true}>
-          <Link to={`/page/${counter}`} onClick={this.handleClick} >
+          <Link to={`/pages/${counter}`} onClick={this.handleClick} >
             <ListItemText primary={counter}></ListItemText>
           </Link>
         </ListItem>
