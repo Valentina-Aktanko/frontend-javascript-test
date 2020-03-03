@@ -151,7 +151,6 @@ export class FormAdd extends Component {
         },
       });
     } else console.log('Ошибка при добавлении данных!');
-    
   }
 
   render() {

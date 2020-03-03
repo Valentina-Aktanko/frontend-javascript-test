@@ -27,8 +27,8 @@ export class App extends Component {
         (result) => {
           this.setState({
             isLoaded: true,
-            fullDataArray: result,
-            dataArray: result,
+            fullDataArray: Array.from(result),
+            dataArray: Array.from(result),
             pages: Math.ceil(result.length / pageCount),
           });
         },
@@ -73,7 +73,7 @@ export class App extends Component {
     // TODO: Immutable.map
     const { fullDataArray, pageCount } = this.state;
     this.setState({
-      dataArray: fullDataArray,
+      dataArray: Array.from(fullDataArray),
       pages: Math.ceil(fullDataArray.length / pageCount)
     });
   }
