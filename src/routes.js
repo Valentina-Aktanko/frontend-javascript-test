@@ -1,6 +1,4 @@
 import { App } from 'components/App';
-// import { Settings } from 'components/Settings';
-import { Layout } from 'components/Layout';
 import { Settings } from 'components/Settings';
 
 export const routes = [

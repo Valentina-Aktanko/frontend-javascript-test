@@ -40,17 +40,6 @@ export class App extends Component {
         }
       )
   }
-  // componentDidUpdate(prevProps, prevState) {
-  //   const { dataArray, pageCount } = this.state;
-
-  //   debugger
-  //   if (dataArray !== prevProps.dataArray) {
-  //     this.setState({
-  //       pages: Math.ceil(dataArray.length / pageCount),
-  //     });
-  //   }
-  // }
-
 
   handleAddData = (newData) => {
     this.setState(prevState => {
@@ -149,8 +138,15 @@ export class App extends Component {
 
   render() {
     const { error, isLoaded, dataArray, pageNum, pageCount, pages } = this.state;
+
     const { match } = this.props;
-    console.log(this.props);
+    let pNum = null;
+
+    if (match && match.params.pageNum) {
+      pNum = match.params.pageNum;
+    }
+    console.log(pNum);
+    
 
     if (error) {
       return <div>Ошибка: {error.message}</div>
