@@ -139,15 +139,6 @@ export class App extends Component {
   render() {
     const { error, isLoaded, dataArray, pageNum, pageCount, pages } = this.state;
 
-    const { match } = this.props;
-    let pNum = null;
-
-    if (match && match.params.pageNum) {
-      pNum = match.params.pageNum;
-    }
-    console.log(pNum);
-    
-
     if (error) {
       return <div>Ошибка: {error.message}</div>
     } else if (!isLoaded) {
